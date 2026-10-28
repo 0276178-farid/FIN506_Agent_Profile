@@ -95,6 +95,10 @@ Every rule below is implemented as a commented function.
    - Long term: money you will not touch. It moves the most, and the years do the
      work.
 
+7. **Confirmed amount.** The user confirms the amount she actually transferred,
+   which may differ from the suggested amount. The buckets are recalculated with the
+   same percentages. Zero and negative amounts are rejected.
+
 ## The guide's fictional screens
 
 The execution guide demonstrates "Casa de Bolsa Demo". Every screen is invented and
