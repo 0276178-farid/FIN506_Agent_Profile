@@ -95,6 +95,35 @@ Every rule below is implemented as a commented function.
    - Long term: money you will not touch. It moves the most, and the years do the
      work.
 
+## The guide's fictional screens
+
+The execution guide demonstrates "Casa de Bolsa Demo". Every screen is invented and
+labelled "Demo mode". Four steps:
+
+1. **Open the account.** The institution asks for: full name, CURP, date of birth,
+   address, and a photo of an official ID. Expect to wait one business day for
+   approval.
+2. **Fund the account.** The institution shows a CLABE in your own name. Transfer to
+   it from your bank, exactly as you would to any other account. The money arrives
+   the same day.
+3. **Choose where it goes.** The institution's screen lists its options grouped by
+   term. Match each of your three buckets to the group with the same term.
+4. **Confirm.** The institution shows the amount and the term before you confirm.
+   Check that the amount matches what you intended.
+
+No real institution's interface is reproduced, and no instrument is named.
+
+## Demo inputs
+
+Until steps 1 and 2 exist, steps 3 and 4 run with these hardcoded values:
+
+- Amount to invest: 2,000,000 centavos (MXN 20,000.00)
+- Horizon: 2 to 5 years
+- Risk answer: "I would hold"
+
+Expected result under Money rules 1 and 2: 40% short, 40% medium, 20% long —
+800,000 / 800,000 / 400,000 centavos.
+
 ## Dependencies (closed list)
 
 Anything outside this list requires a BITACORA.md entry explaining why it was added.
@@ -118,11 +147,9 @@ Written down so the agent and I stop re-litigating it.
   maintenance every time it changes.
 - More than one user role (no adviser view, no admin view).
 - Integration with any real financial institution.
-- Automatic confirmation of transfers, whether through a partner institution or an
-  account aggregator. Confirmation is manual this semester: the user enters the amount
-  she transferred. The reason is that both alternatives require a signed agreement with
-  a licensed institution, which does not exist yet, and both would break the closed
-  dependency list.
+- - Automatic confirmation of transfers. Step 5 is in scope: the user types the amount
+  she transferred and the position moves from pending to confirmed. Detecting the
+  transfer automatically is not.
 
 ## Regulatory position
 
@@ -172,3 +199,4 @@ realistic paid CAC of MXN 800: LTV/CAC = 2.8x, payback = 4.5 months.
 | 2026-08-30 | Added an execution guide inside step 4 | The user is not blocked by not knowing what to buy, she is blocked by not knowing how to operate the institution's app. This is where users are lost, so it belongs in the core flow rather than in a separate product | Farid Pacheco Salum |
 | 2026-10-27 | Added Money rules section: allocation by horizon, risk adjustment, integer centavos | The allocation logic was described in the core flow but never specified as rules, so there was nothing for the agent to implement or for me to defend | Farid Pacheco Salum |
 | 2026-10-27 | Specified rounding, bucket explanations and a fictional institution for the guide | The agent stopped and asked rather than inventing these; the answers are product decisions and belong in the source of truth | Farid Pacheco Salum |
+| 2026-10-27 | Specified the guide's fictional screens, demo inputs, and that step 5 is in scope | The agent could not plan without them, and the scope boundary around confirmation was ambiguous | Farid Pacheco Salum |
