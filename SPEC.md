@@ -55,6 +55,33 @@ The single flow that must work end to end at Demo Day:
 
 All data is invented. There is no real personal data in this repository.
 
+## Money rules
+
+Every rule below is implemented as a commented function.
+
+1. **Allocation by horizon.** The suggested split depends on when the user says she
+   would need the money:
+   - under 2 years: 100% short term
+   - 2 to 5 years: 40% short, 40% medium, 20% long
+   - over 5 years: 20% short, 30% medium, 50% long
+
+   The horizon decides, not the risk answer, because a long-term instrument can be
+   down exactly when the money is needed.
+
+2. **Risk adjustment.** The answer to "what would you do if the balance dropped 10
+   percent" shifts the split, it does not set it:
+   - "I would sell": move 20 points from long to short
+   - "I would hold": no change
+   - "I would invest more": move 10 points from short to long
+
+   Percentages never go below 0 or above 100, and always sum to 100.
+
+3. **No instrument is named.** The output is a split across horizon buckets, with one
+   sentence each. Naming a security would require the asesor en inversiones
+   registration. `TODO-verify`
+
+4. **Amounts in integer centavos.** No floating-point arithmetic for money.
+
 ## Dependencies (closed list)
 
 Anything outside this list requires a BITACORA.md entry explaining why it was added.
@@ -127,3 +154,4 @@ realistic paid CAC of MXN 800: LTV/CAC = 2.8x, payback = 4.5 months.
 | 2026-08-30 | Initial SPEC | First project configuration | Farid Pacheco Salum |
 | 2026-08-30 | Added confirmation step to core flow and status to Contribution | Without it the app could show a projection for money the user never actually transferred | Farid Pacheco Salum |
 | 2026-08-30 | Added an execution guide inside step 4 | The user is not blocked by not knowing what to buy, she is blocked by not knowing how to operate the institution's app. This is where users are lost, so it belongs in the core flow rather than in a separate product | Farid Pacheco Salum |
+| 2026-10-27 | Added Money rules section: allocation by horizon, risk adjustment, integer centavos | The allocation logic was described in the core flow but never specified as rules, so there was nothing for the agent to implement or for me to defend | Farid Pacheco Salum |
