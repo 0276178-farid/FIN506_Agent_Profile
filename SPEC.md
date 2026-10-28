@@ -82,6 +82,19 @@ Every rule below is implemented as a commented function.
 
 4. **Amounts in integer centavos.** No floating-point arithmetic for money.
 
+5. **Rounding.** Amounts are split in integer centavos. When a percentage split
+   leaves a remainder, the remainder goes to the bucket with the largest
+   percentage, so the three buckets always sum exactly to the amount invested.
+
+6. **Bucket explanations.** Each bucket is shown with one sentence, naming no
+   instrument:
+   - Short term: money you may need soon. It moves very little, and it is there
+     when you ask for it.
+   - Medium term: money you can leave for a few years. It moves more, and it has
+     time to recover.
+   - Long term: money you will not touch. It moves the most, and the years do the
+     work.
+
 ## Dependencies (closed list)
 
 Anything outside this list requires a BITACORA.md entry explaining why it was added.
@@ -99,7 +112,10 @@ Written down so the agent and I stop re-litigating it.
 - Recommending specific named instruments (regulatory implications: see note below).
 - Native mobile app.
 - Video content. The execution guide is text and static screens only.
-- Guides for more than one institution. One is enough to prove the flow works.
+- Guides for a real institution. The execution guide demonstrates a fictional
+  institution, "Casa de Bolsa Demo", with invented screens labelled "Demo mode".
+  Imitating a real institution's interface would borrow its brand and would need
+  maintenance every time it changes.
 - More than one user role (no adviser view, no admin view).
 - Integration with any real financial institution.
 - Automatic confirmation of transfers, whether through a partner institution or an
@@ -155,3 +171,4 @@ realistic paid CAC of MXN 800: LTV/CAC = 2.8x, payback = 4.5 months.
 | 2026-08-30 | Added confirmation step to core flow and status to Contribution | Without it the app could show a projection for money the user never actually transferred | Farid Pacheco Salum |
 | 2026-08-30 | Added an execution guide inside step 4 | The user is not blocked by not knowing what to buy, she is blocked by not knowing how to operate the institution's app. This is where users are lost, so it belongs in the core flow rather than in a separate product | Farid Pacheco Salum |
 | 2026-10-27 | Added Money rules section: allocation by horizon, risk adjustment, integer centavos | The allocation logic was described in the core flow but never specified as rules, so there was nothing for the agent to implement or for me to defend | Farid Pacheco Salum |
+| 2026-10-27 | Specified rounding, bucket explanations and a fictional institution for the guide | The agent stopped and asked rather than inventing these; the answers are product decisions and belong in the source of truth | Farid Pacheco Salum |
