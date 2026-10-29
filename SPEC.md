@@ -1,6 +1,6 @@
 # SPEC: Unstuck
 
-Last updated: 2026-08-30 · Owner: Farid Pacheco Salum (individual project, no partner assigned)
+Last updated: 2026-10-29 · Owner: Farid Pacheco Salum (individual project, no partner assigned)
 
 ## Problem
 
@@ -67,14 +67,16 @@ Every rule below is implemented as a commented function.
 
    The horizon decides, not the risk answer, because a long-term instrument can be
    down exactly when the money is needed.
-
 2. **Risk adjustment.** The answer to "what would you do if the balance dropped 10
    percent" shifts the split, it does not set it:
    - "I would sell": move 20 points from long to short
    - "I would hold": no change
    - "I would invest more": move 10 points from short to long
 
-   Percentages never go below 0 or above 100, and always sum to 100.
+   A shift is capped at what the source bucket actually holds. Under a 2-year
+   horizon the split is already 100% short, so "I would sell" changes nothing:
+   there is nothing more conservative to move to. Percentages never go below 0 or
+   above 100, and always sum to 100.
 
 3. **No instrument is named.** The output is a split across horizon buckets, with one
    sentence each. Naming a security would require the asesor en inversiones
@@ -84,7 +86,10 @@ Every rule below is implemented as a commented function.
 
 5. **Rounding.** Amounts are split in integer centavos. When a percentage split
    leaves a remainder, the remainder goes to the bucket with the largest
-   percentage, so the three buckets always sum exactly to the amount invested.
+   percentage, so the three buckets always sum exactly to the amount invested. When
+   two buckets tie for the largest percentage, the order is short, then medium,
+   then long: the leftover centavos go to the most conservative of the tied
+   buckets.
 
 6. **Bucket explanations.** Each bucket is shown with one sentence, naming no
    instrument:
@@ -157,7 +162,7 @@ Written down so the agent and I stop re-litigating it.
   maintenance every time it changes.
 - More than one user role (no adviser view, no admin view).
 - Integration with any real financial institution.
-- - Automatic confirmation of transfers. Step 5 is in scope: the user types the amount
+- Automatic confirmation of transfers. Step 5 is in scope: the user types the amount
   she transferred and the position moves from pending to confirmed. Detecting the
   transfer automatically is not.
 
@@ -211,3 +216,5 @@ realistic paid CAC of MXN 800: LTV/CAC = 2.8x, payback = 4.5 months.
 | 2026-10-27 | Specified rounding, bucket explanations and a fictional institution for the guide | The agent stopped and asked rather than inventing these; the answers are product decisions and belong in the source of truth | Farid Pacheco Salum |
 | 2026-10-27 | Specified the guide's fictional screens, demo inputs, and that step 5 is in scope | The agent could not plan without them, and the scope boundary around confirmation was ambiguous | Farid Pacheco Salum |
 | 2026-10-29 | Recorded the confirmed-amount rule and the fake destination placeholder | The agent refused to plan until both were in the source of truth, which is rule 1 working as intended | Farid Pacheco Salum |
+| 2026-10-29 | Added a tie-break to the rounding rule | The 40/40 split has no uniquely largest bucket, so the remainder had no defined destination | Farid Pacheco Salum |
+| 2026-10-29 | Capped the risk shift at the source bucket's balance | A 100% short split has nothing in long to move, so the shift had no defined behaviour | Farid Pacheco Salum |
