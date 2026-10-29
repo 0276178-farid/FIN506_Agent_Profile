@@ -97,7 +97,9 @@ Every rule below is implemented as a commented function.
 
 7. **Confirmed amount.** The user confirms the amount she actually transferred,
    which may differ from the suggested amount. The buckets are recalculated with the
-   same percentages. Zero and negative amounts are rejected.
+   same percentages and the same remainder rule. Zero and negative amounts are
+   rejected. The app never requires the suggested amount: step 5 exists because the
+   transfer cannot be detected, and requiring a match would ask the user to lie.
 
 ## The guide's fictional screens
 
@@ -116,6 +118,10 @@ labelled "Demo mode". Four steps:
    Check that the amount matches what you intended.
 
 No real institution's interface is reproduced, and no instrument is named.
+
+The transfer screen shows no usable account number. The destination is a visibly
+non-transferable placeholder, not a plausible CLABE, labelled "Demo mode". A
+realistic-looking account number could be copied and used by mistake.
 
 ## Demo inputs
 
@@ -204,3 +210,4 @@ realistic paid CAC of MXN 800: LTV/CAC = 2.8x, payback = 4.5 months.
 | 2026-10-27 | Added Money rules section: allocation by horizon, risk adjustment, integer centavos | The allocation logic was described in the core flow but never specified as rules, so there was nothing for the agent to implement or for me to defend | Farid Pacheco Salum |
 | 2026-10-27 | Specified rounding, bucket explanations and a fictional institution for the guide | The agent stopped and asked rather than inventing these; the answers are product decisions and belong in the source of truth | Farid Pacheco Salum |
 | 2026-10-27 | Specified the guide's fictional screens, demo inputs, and that step 5 is in scope | The agent could not plan without them, and the scope boundary around confirmation was ambiguous | Farid Pacheco Salum |
+| 2026-10-29 | Recorded the confirmed-amount rule and the fake destination placeholder | The agent refused to plan until both were in the source of truth, which is rule 1 working as intended | Farid Pacheco Salum |
