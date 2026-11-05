@@ -89,3 +89,24 @@ decision below is mine.
   and remainder rules match the spec. Outstanding for me: I can defend the allocation
   logic but not yet every line of app.js, so the next task is to have the agent
   explain the remainder calculation and the risk cap before I move on.
+
+  ## 2026-11-05 · Farid
+- Goal: build step 4 of the core flow, the execution guide.
+- AI did: GitHub Copilot, agent mode, built the four Casa de Bolsa Demo screens in
+  the three existing files. Node.js is not installed on my machine, so it could not
+  run a syntax check and verified the flow in the browser instead. It left my
+  uncommitted BITACORA.md edit untouched without being asked.
+- We decided: accepted the guide after two rounds of fixes. The reviewer returned
+  STOP AND TALK the first time, because screen 4 was missing the spec's instruction
+  to check the amount, and because the centavo formula had no comment, which breaks
+  AGENTS.md rule 2. After the fix it returned APPROVE WITH FIXES, because the new
+  comment claimed that line made the buckets sum exactly when in fact the remainder
+  logic below does that. Fixed again and it approved. I also had the agent rewrite
+  the comment once more in simpler language, because I could not understand the
+  first version and I have to defend it in December.
+- Reviewer flags: final verdict APPROVE, no findings. It asked me to be ready to
+  explain the risk cap and the remainder tie-break. I can now: under a 2-year
+  horizon the split is already 100% short, so "I would sell" moves nothing because
+  there is nothing in long to move, and you cannot be more conservative than 100%
+  short. On a 40/40 tie the leftover centavos go to short, because it is the most
+  conservative of the tied buckets.
