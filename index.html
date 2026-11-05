@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f4ee">
+    <title>Unstuck | Suggested allocation</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="topline">
+        <a class="wordmark" href="index.html" aria-label="Unstuck home">unstuck<span>.</span></a>
+        <p class="demo-tag"><span aria-hidden="true"></span> Demo inputs</p>
+      </header>
+
+      <section class="allocation" aria-labelledby="page-title">
+        <div class="intro">
+          <p class="eyebrow">03 <span>/</span> Suggested allocation</p>
+          <h1 id="page-title">Give each part of your money a time horizon.</h1>
+          <p class="intro-copy">Your suggested split follows when you expect to need the money.</p>
+        </div>
+
+        <dl class="scenario" aria-label="Answers used for this suggestion">
+          <div>
+            <dt>Amount to invest</dt>
+            <dd id="scenario-amount"></dd>
+          </div>
+          <div>
+            <dt>Time horizon</dt>
+            <dd id="scenario-horizon"></dd>
+          </div>
+          <div>
+            <dt>If the balance fell 10%</dt>
+            <dd id="scenario-risk"></dd>
+          </div>
+        </dl>
+
+        <div class="allocation-heading">
+          <h2>Your suggested split</h2>
+          <p>By time horizon</p>
+        </div>
+
+        <div class="bucket-list" id="bucket-list" aria-live="polite"></div>
+
+        <footer class="allocation-total">
+          <span>Total suggested amount</span>
+          <strong id="allocation-total"></strong>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>
