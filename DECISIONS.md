@@ -27,6 +27,10 @@ One line per choice that is expensive to undo, with the reason.
   Remove the guide and the allocation still stands; remove the allocation and all
   that is left is a course.
 - **One user role only.** No adviser view, no admin view.
+- **The confirmation form is visible from the start, not gated behind the guide.**
+  The reviewer flagged it twice. Gating it would add state and code I would have to
+  defend, for a flow a single user walks through in order anyway. The guide button
+  comes first visually, which is enough.
 
 ## Technical
 

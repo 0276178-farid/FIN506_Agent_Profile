@@ -45,7 +45,7 @@
         <div class="bucket-list" id="bucket-list" aria-live="polite"></div>
 
         <footer class="allocation-total">
-          <span>Total suggested amount</span>
+          <span id="allocation-total-label">Total suggested amount</span>
           <strong id="allocation-total"></strong>
         </footer>
 
@@ -53,6 +53,19 @@
           <p>Ready to see the fictional account walkthrough?</p>
           <button class="primary-button" id="open-guide" type="button">Open execution guide</button>
         </div>
+
+        <section class="contribution-confirmation" aria-labelledby="contribution-title">
+          <h2 id="contribution-title">Confirm simulated contribution</h2>
+          <p class="guide-copy">Enter the amount you actually sent, in centavos. The suggested amount is filled in; change it if needed. Demo only: no real money moves.</p>
+          <form id="contribution-form">
+            <label for="contribution-amount">Amount sent (centavos)</label>
+            <div class="confirmation-controls">
+              <input id="contribution-amount" name="amount" type="text" inputmode="numeric" autocomplete="off" required>
+              <button class="primary-button" type="submit">Confirm amount</button>
+            </div>
+          </form>
+          <p class="contribution-status" id="contribution-status" role="status" aria-live="polite">Pending. No amount has been confirmed.</p>
+        </section>
       </section>
 
       <section class="execution-guide" id="execution-guide" aria-labelledby="guide-title" hidden>

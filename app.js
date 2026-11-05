@@ -1,6 +1,7 @@
 const demoAmountCentavos = 2_000_000;
 const demoHorizon = "twoToFiveYears";
 const demoRiskAnswer = "hold";
+const simulatedContribution = { amountCentavos: BigInt(demoAmountCentavos), status: "pending" };
 
 const bucketDetails = [
   {
@@ -59,10 +60,14 @@ function getSuggestedPercentages(horizon, riskAnswer) {
 }
 
 function splitAmountIntoBuckets(amountCentavos, percentages) {
-  if (!Number.isSafeInteger(amountCentavos) || amountCentavos < 0) {
+  const isValidAmount = typeof amountCentavos === "bigint"
+    ? amountCentavos >= 0n
+    : Number.isSafeInteger(amountCentavos) && amountCentavos >= 0;
+  if (!isValidAmount) {
     throw new RangeError("The amount must be a non-negative whole number of centavos.");
   }
 
+  // Integer centavos avoid fractional-centavo rounding in money calculations.
   const totalCentavos = BigInt(amountCentavos);
   // This calculates each bucket's share; any leftover centavos are assigned below.
   const buckets = bucketDetails.map((bucket) => ({
@@ -87,6 +92,7 @@ function splitAmountIntoBuckets(amountCentavos, percentages) {
 }
 
 function formatCentavosAsMXN(amountCentavos) {
+  // Division and remainder by 100 separate whole pesos from centavos for display.
   const pesos = amountCentavos / 100n;
   const remainingCentavos = (amountCentavos % 100n).toString().padStart(2, "0");
   const formattedPesos = new Intl.NumberFormat("es-MX", { maximumFractionDigits: 0 }).format(pesos);
@@ -96,14 +102,21 @@ function formatCentavosAsMXN(amountCentavos) {
 
 function renderAllocation() {
   const percentages = getSuggestedPercentages(demoHorizon, demoRiskAnswer);
-  const buckets = splitAmountIntoBuckets(demoAmountCentavos, percentages);
+  const allocationAmountCentavos = simulatedContribution.status === "confirmed"
+    ? simulatedContribution.amountCentavos
+    : BigInt(demoAmountCentavos);
+  const buckets = splitAmountIntoBuckets(allocationAmountCentavos, percentages);
 
-  document.querySelector("#scenario-amount").textContent = formatCentavosAsMXN(BigInt(demoAmountCentavos));
+  document.querySelector("#scenario-amount").textContent = formatCentavosAsMXN(allocationAmountCentavos);
   document.querySelector("#scenario-horizon").textContent = horizonLabels[demoHorizon];
   document.querySelector("#scenario-risk").textContent = riskLabels[demoRiskAnswer];
-  document.querySelector("#allocation-total").textContent = formatCentavosAsMXN(BigInt(demoAmountCentavos));
+  document.querySelector("#allocation-total-label").textContent = simulatedContribution.status === "confirmed"
+    ? "Total confirmed amount"
+    : "Total suggested amount";
+  document.querySelector("#allocation-total").textContent = formatCentavosAsMXN(allocationAmountCentavos);
 
   const bucketList = document.querySelector("#bucket-list");
+  bucketList.replaceChildren();
   for (const bucket of buckets) {
     const article = document.createElement("article");
     article.className = "bucket";
@@ -143,6 +156,35 @@ function renderAllocation() {
 }
 
 renderAllocation();
+
+const contributionForm = document.querySelector("#contribution-form");
+const contributionAmountInput = document.querySelector("#contribution-amount");
+const contributionStatus = document.querySelector("#contribution-status");
+const confirmContributionButton = contributionForm.querySelector("button[type='submit']");
+
+contributionAmountInput.value = String(simulatedContribution.amountCentavos);
+contributionForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const amountText = contributionAmountInput.value.trim();
+  if (!/^\d+$/.test(amountText)) {
+    contributionStatus.textContent = "Enter a positive whole number of centavos. The contribution remains pending.";
+    return;
+  }
+
+  const amountCentavos = BigInt(amountText);
+  if (amountCentavos <= 0n) {
+    contributionStatus.textContent = "Enter a positive amount. The contribution remains pending.";
+    return;
+  }
+
+  simulatedContribution.amountCentavos = amountCentavos;
+  simulatedContribution.status = "confirmed";
+  renderAllocation();
+  contributionAmountInput.disabled = true;
+  confirmContributionButton.disabled = true;
+  contributionStatus.textContent = `Confirmed in this demo for ${formatCentavosAsMXN(amountCentavos)}. The buckets above now use this amount. No real transfer occurred.`;
+});
 
 const allocationSection = document.querySelector(".allocation");
 const executionGuide = document.querySelector("#execution-guide");
