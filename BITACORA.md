@@ -110,3 +110,24 @@ decision below is mine.
   there is nothing in long to move, and you cannot be more conservative than 100%
   short. On a 40/40 tie the leftover centavos go to short, because it is the most
   conservative of the tied buckets.
+
+  ## 2026-11-05 · Farid (second session)
+- Goal: build step 5 of the core flow, confirming the amount actually transferred.
+- AI did: Copilot in agent mode added the confirmation form, the pending/confirmed
+  status and the validation, in the same three files. It also rejected amounts with
+  fractions of a centavo, which is not in SPEC.md but is consistent with Money
+  rules 4.
+- We decided: the reviewer flagged twice that the confirmation form is usable before
+  the user opens the guide. I decided not to gate it with code and recorded that in
+  DECISIONS.md instead: gating would add state I would have to defend at the
+  defence, for a flow one user walks in order anyway, and the guide button already
+  comes first visually. After I documented the decision the reviewer accepted it.
+  I also asked for the centavo comment to be rewritten twice, because the first
+  version was wrong about which line makes the buckets sum exactly and the second
+  was still too technical for me to explain.
+- Reviewer flags: final verdict APPROVE, no findings. Its hardest question was how
+  anyone can tell a confirmed amount is simulated rather than proof money moved. My
+  answer: the app cannot verify the transfer, so it never claims it. Every screen is
+  labelled Demo mode, the destination is unusable, the last screen states no transfer
+  was made, and the position stays pending until the user declares the amount. What
+  is confirmed is what she said, not what the app checked.
