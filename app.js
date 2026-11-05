@@ -64,6 +64,7 @@ function splitAmountIntoBuckets(amountCentavos, percentages) {
   }
 
   const totalCentavos = BigInt(amountCentavos);
+  // This calculates each bucket's share; any leftover centavos are assigned below.
   const buckets = bucketDetails.map((bucket) => ({
     ...bucket,
     percentage: percentages[bucket.key],
@@ -142,3 +143,52 @@ function renderAllocation() {
 }
 
 renderAllocation();
+
+const allocationSection = document.querySelector(".allocation");
+const executionGuide = document.querySelector("#execution-guide");
+const guideScreens = [...document.querySelectorAll(".guide-screen")];
+const guideStepCount = document.querySelector("#guide-step-count");
+let currentGuideStep = 0;
+
+function showGuideStep(stepIndex) {
+  currentGuideStep = stepIndex;
+  guideScreens.forEach((screen, index) => {
+    screen.hidden = index !== currentGuideStep;
+  });
+  guideStepCount.textContent = `Step ${currentGuideStep + 1} of ${guideScreens.length}`;
+  document.querySelector("#guide-previous").textContent = currentGuideStep === 0
+    ? "Back to suggested allocation"
+    : "Previous";
+  document.querySelector("#guide-next").hidden = currentGuideStep === guideScreens.length - 1;
+  document.querySelector("#guide-return").hidden = currentGuideStep !== guideScreens.length - 1;
+  guideScreens[currentGuideStep].querySelector("h2").focus();
+}
+
+function returnToAllocation() {
+  executionGuide.hidden = true;
+  allocationSection.hidden = false;
+  document.querySelector("#page-title").focus();
+}
+
+document.querySelector("#open-guide").addEventListener("click", () => {
+  allocationSection.hidden = true;
+  executionGuide.hidden = false;
+  document.querySelector("#guide-amount").textContent = formatCentavosAsMXN(BigInt(demoAmountCentavos));
+  document.querySelector("#guide-horizon").textContent = horizonLabels[demoHorizon];
+  document.querySelector("#guide-title").focus();
+  showGuideStep(0);
+});
+
+document.querySelector("#guide-previous").addEventListener("click", () => {
+  if (currentGuideStep === 0) {
+    returnToAllocation();
+    return;
+  }
+  showGuideStep(currentGuideStep - 1);
+});
+
+document.querySelector("#guide-next").addEventListener("click", () => {
+  showGuideStep(currentGuideStep + 1);
+});
+
+document.querySelector("#guide-return").addEventListener("click", returnToAllocation);

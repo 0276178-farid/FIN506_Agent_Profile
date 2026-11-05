@@ -64,3 +64,28 @@ decision below is mine.
 - Reviewer flags: reviewer not run for this session either. Outstanding for me before
   Tuesday: verify every `TODO-verify` in SPEC.md, get the real name of the WhatsApp
   group, and fill the four unit-economics blanks so SPEC.md and the deck agree.
+
+  ## 2026-10-27 to 11-05 · Farid
+- Goal: build step 3 of the core flow, the suggested allocation screen.
+- AI did: GitHub Copilot in VS Code, in Plan mode first, then agent mode. It read
+  AGENTS.md, SPEC.md and PROJECT_METHOD.md and refused to plan five times, each time
+  because something it needed was not in SPEC.md: which institution the guide should
+  show, how to round fractional centavos, the bucket sentences, whether step 5 was in
+  scope, what to do when the confirmed amount differs from the suggestion, and what
+  the transfer screen should display as its destination. It then produced a four-task
+  plan and built task 1: index.html, styles.css and app.js.
+- We decided: every one of those answers. The two that changed the Money rules were
+  mine to find and I had not seen them before the agent asked: a 40/40 split has no
+  single largest bucket, so the remainder needed a tie-break (short, then medium,
+  then long, because short is the most conservative); and a 100% short split has
+  nothing in long to move, so "I would sell" is capped and changes nothing. Chose a
+  fictional institution over imitating a real one, and a visibly unusable placeholder
+  over a plausible CLABE, so nobody can copy a number by mistake. Chose to accept any
+  positive confirmed amount rather than require the suggested one, because step 5
+  exists precisely because I cannot detect the transfer.
+- Reviewer flags: ran the reviewer in a separate Ask-mode chat with a clean context,
+  per PROJECT_METHOD section 1. Verdict APPROVE, no findings. It confirmed integer
+  centavos with BigInt and no floating-point arithmetic, and that the horizon, risk
+  and remainder rules match the spec. Outstanding for me: I can defend the allocation
+  logic but not yet every line of app.js, so the next task is to have the agent
+  explain the remainder calculation and the risk cap before I move on.
