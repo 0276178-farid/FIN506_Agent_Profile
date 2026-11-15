@@ -15,11 +15,11 @@ for loss. The result is inaction: the money sits still.
 
 ## User
 
-Norma Salum Esper, 53, Mexico City. She manages several rental apartments and
-receives monthly income that accumulates in her bank account earning nothing. She
-wants to invest it and has not, because she does not know where to start or whom to
-trust. Her reference point is the return on an apartment: an asset she can see,
-touch and understand.
+N., 54, Mexico City. She manages several rental apartments and receives monthly
+income that accumulates in her bank account earning nothing. She wants to invest
+it and has not, because she does not know where to start or whom to trust. Her
+reference point is the return on an apartment: an asset she can see, touch and
+understand. Interview notes are kept outside the repository.
 
 ## Core flow (the MVP)
 

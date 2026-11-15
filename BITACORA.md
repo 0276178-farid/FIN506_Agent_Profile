@@ -9,7 +9,7 @@ decision below is mine.
 - Goal: choose a user and configure SPEC.md and AGENTS.md for the wealthtech vertical.
 - AI did: Claude (Anthropic) reviewed the Session 4 slides and the assignment brief,
   challenged my first framing of the user, and drafted both files from my answers.
-- We decided: kept Norma Salum Esper as the named user and rejected broadening to a
+- We decided: kept N. as the named user and rejected broadening to a
   demographic segment, because the brief scores a segment at zero. Chose a flat MXN 199
   subscription over a percentage fee on assets, because a percentage fee makes revenue
   depend on how much the user trusts me with early on, which is very little. Added a
@@ -131,3 +131,16 @@ decision below is mine.
   labelled Demo mode, the destination is unusable, the last screen states no transfer
   was made, and the position stays pending until the user declares the amount. What
   is confirmed is what she said, not what the app checked.
+
+  ## 2026-11-15 · Farid
+- Goal: prepare the repository for publication on GitHub.
+- AI did: Claude flagged that my user's real full name was still in SPEC.md,
+  BITACORA.md and DECISIONS.md, which the professor's harness document had
+  marked in October and I had not fixed.
+- We decided: replaced the real name with the pseudonym "N." everywhere before
+  the first push, not after, because a name pushed once stays in the git history
+  even if a later commit removes it. This edits earlier entries, which breaks the
+  append-only rule in PROJECT_METHOD section 2; I did it anyway because the rule
+  protects the record of my decisions, not a real person's name, and the name
+  should never have been there.
+- Reviewer flags: not run; this change touches no code.
