@@ -138,6 +138,18 @@ Every rule below is implemented as a commented function.
    statement never holds a fraction of a centavo, and interest is credited rounded,
    so compounding on anything else would show a balance the institution could not
    actually hold.
+12. **Input limits.** Monthly rental income and the monthly set-aside must both be
+    positive whole-centavo amounts, and the set-aside may not exceed the income.
+    Money rule 10 makes the set-aside a share of what comes in each month, so a
+    set-aside larger than the income would describe money that does not exist.
+    Invalid values show a message and the flow does not continue.
+13. **Fixed-point growth factors.** A monthly growth factor is fractional, so
+    applying it directly to a centavo balance would be floating-point arithmetic on
+    money, which Money rule 4 forbids. Each factor is therefore derived once from the
+    annual rate, multiplied by 1,000,000,000,000 and rounded to a whole number. Growth
+    is then a BigInt balance times that whole number, divided by the same scale, with
+    the result rounded to the nearest centavo per Money rule 11. Floating point
+    appears only when the factor is first derived; it never touches a balance.
 
 ## The guide's fictional screens
 
@@ -254,3 +266,5 @@ realistic paid CAC of MXN 800: LTV/CAC = 2.8x, payback = 4.5 months.
 | 2026-11-16 | Rewrote the User section after the first interview | I had assumed she was a beginner. She is an experienced investor who left her adviser, which changes the problem from "cannot start" to "has no one she trusts" | Farid Pacheco Salum |
 | 2026-11-16 | Added Money rule 8, the projection rates | Step 6 of the core flow needed a rate per bucket and none was specified | Farid Pacheco Salum |
 | 2026-11-16 | Added Money rules 9, 10 and 11 | The agent could not plan steps 1, 2 and 6 without them: what the purpose question does, whether the set-aside is recurring, and how the projection compounds | Farid Pacheco Salum |
+| 2026-11-16 | Added Money rule 12, the input limits for step 1 | The agent stopped a fourth time: the spec said what the amounts mean but never what values are allowed | Farid Pacheco Salum |
+| 2026-11-16 | Added Money rule 13, fixed-point growth factors | The agent found that Money rules 4 and 11 contradicted each other: rule 11 needs fractional monthly rates, rule 4 forbids floating point on money | Farid Pacheco Salum |
