@@ -115,6 +115,30 @@ Every rule below is implemented as a commented function.
    scenario, never a guarantee. Money rule 4 still applies: the projection is
    computed in integer centavos.
 
+9. **The three questions.** The purpose is recorded as free text and shown back to
+   the user on the allocation screen, but it does not change the split. The horizon
+   decides and the risk answer adjusts it; adding purpose as a third dimension would
+   be a rule I could not defend at the live defence.
+
+10. **The contribution.** The amount the user sets aside is a recurring monthly
+    contribution, not a lump sum. The allocation and the confirmation in Money rule 7
+    apply to one month's contribution. The projection assumes she contributes the
+    same amount every month.
+
+11. **How the projection is computed.** Each bucket compounds monthly at the monthly
+    equivalent of its annual rate from Money rule 8: (1 + annual rate) ^ (1/12) − 1.
+    Contributions are added at the end of each month, so a contribution earns nothing
+    in the month it is made. The starting balance is zero. The bank comparison
+    receives the same contributions and grows at 0%, so its balance is simply the
+    contribution times the number of months. Everything in integer centavos, with
+    the remainder rule in Money rule 5.    
+   Rounding within the projection: each bucket's balance is rounded to the nearest
+   whole centavo after the month's growth is applied, and the contribution is added
+   after that. The next month compounds on the rounded balance. A real account
+   statement never holds a fraction of a centavo, and interest is credited rounded,
+   so compounding on anything else would show a balance the institution could not
+   actually hold.
+
 ## The guide's fictional screens
 
 The execution guide demonstrates "Casa de Bolsa Demo". Every screen is invented and
@@ -229,3 +253,4 @@ realistic paid CAC of MXN 800: LTV/CAC = 2.8x, payback = 4.5 months.
 | 2026-10-29 | Capped the risk shift at the source bucket's balance | A 100% short split has nothing in long to move, so the shift had no defined behaviour | Farid Pacheco Salum |
 | 2026-11-16 | Rewrote the User section after the first interview | I had assumed she was a beginner. She is an experienced investor who left her adviser, which changes the problem from "cannot start" to "has no one she trusts" | Farid Pacheco Salum |
 | 2026-11-16 | Added Money rule 8, the projection rates | Step 6 of the core flow needed a rate per bucket and none was specified | Farid Pacheco Salum |
+| 2026-11-16 | Added Money rules 9, 10 and 11 | The agent could not plan steps 1, 2 and 6 without them: what the purpose question does, whether the set-aside is recurring, and how the projection compounds | Farid Pacheco Salum |
