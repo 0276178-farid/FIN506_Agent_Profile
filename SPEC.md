@@ -15,11 +15,14 @@ for loss. The result is inaction: the money sits still.
 
 ## User
 
-N., 54, Mexico City. She manages several rental apartments and receives monthly
-income that accumulates in her bank account earning nothing. She wants to invest
-it and has not, because she does not know where to start or whom to trust. Her
-reference point is the return on an apartment: an asset she can see, touch and
-understand. Interview notes are kept outside the repository.
+N., 54, Mexico City. She owns and rents out property, and has bought and sold
+four over twenty years. She already invests: she holds savings funds and has
+used a financial adviser, whom she left because she felt her money was not being
+worked hard enough. MXN 200,000 has sat in her current account for years, used
+only to pay maintenance on the apartments. Her horizon on that money is ten
+years or more. She is not stuck because she cannot invest; she is stuck because
+she has not found anyone she trusts to tell her where. Interview notes are kept
+outside the repository.
 
 ## Core flow (the MVP)
 
@@ -105,6 +108,12 @@ Every rule below is implemented as a commented function.
    same percentages and the same remainder rule. Zero and negative amounts are
    rejected. The app never requires the suggested amount: step 5 exists because the
    transfer cannot be detected, and requiring a match would ask the user to lie.
+
+8. **Projection.** Each bucket grows at an assumed annual rate: short term 7%,
+   medium term 9%, long term 12%. The bank comparison grows at 0%. The rates are
+   assumptions, shown on screen as such, and the projection is always labelled a
+   scenario, never a guarantee. Money rule 4 still applies: the projection is
+   computed in integer centavos.
 
 ## The guide's fictional screens
 
@@ -218,3 +227,5 @@ realistic paid CAC of MXN 800: LTV/CAC = 2.8x, payback = 4.5 months.
 | 2026-10-29 | Recorded the confirmed-amount rule and the fake destination placeholder | The agent refused to plan until both were in the source of truth, which is rule 1 working as intended | Farid Pacheco Salum |
 | 2026-10-29 | Added a tie-break to the rounding rule | The 40/40 split has no uniquely largest bucket, so the remainder had no defined destination | Farid Pacheco Salum |
 | 2026-10-29 | Capped the risk shift at the source bucket's balance | A 100% short split has nothing in long to move, so the shift had no defined behaviour | Farid Pacheco Salum |
+| 2026-11-16 | Rewrote the User section after the first interview | I had assumed she was a beginner. She is an experienced investor who left her adviser, which changes the problem from "cannot start" to "has no one she trusts" | Farid Pacheco Salum |
+| 2026-11-16 | Added Money rule 8, the projection rates | Step 6 of the core flow needed a rate per bucket and none was specified | Farid Pacheco Salum |

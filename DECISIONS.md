@@ -44,3 +44,11 @@ One line per choice that is expensive to undo, with the reason.
 
 - ARPU MXN 199/month, gross margin 90%, monthly churn 8%, CAC MXN 40. Every one is
   an assumption; sources are in SPEC.md.
+
+  ## Funding
+
+  - **Raise MXN 550,000 on a SAFE, not shares.** The three valuation methods span
+  925k to 1.9M, roughly 2x. A SAFE sets no valuation today, so I do not have to
+  defend a point estimate I cannot support. At the midpoint it implies 28.9% sold.
+- **Three months of buffer, not six.** Six months would have pushed the raise to
+  800,000 and cost ~39% of the company for a hole that is only 285,000 deep.
