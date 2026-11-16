@@ -37,7 +37,7 @@ const riskLabels = {
 };
 
 function getSuggestedPercentages(horizon, riskAnswer) {
-  // These are the SPEC's starting mixes (Money rule 1); the risk answer adjusts them afterwards (Money rule 2).
+  // This is the SPEC's starting mix (Money rule 1); the risk answer adjusts it afterwards (Money rule 2).
   const percentagesByHorizon = {
     underTwoYears: { short: 100, medium: 0, long: 0 },
     twoToFiveYears: { short: 40, medium: 40, long: 20 },
