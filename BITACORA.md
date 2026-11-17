@@ -203,3 +203,12 @@ had been handed out in class. I moved to 2.4x. It lowers my valuation by about
 MXN 380,000 and costs me two points of the company. The lesson is not about the
 number: it is that I treated the course material as background reading and the
 answer was in it.
+
+**The app cannot model my own user's money.** Rehearsing the demo, I could not
+answer where the demo inputs came from: I had invented a monthly rental income and
+a set-aside and had started calling them N.'s numbers. They are not. What the
+interview gave me is MXN 200,000 that already exists, sitting idle. Money rule 11
+starts every projection at a zero balance and adds a monthly contribution, so the
+app models a flow and her money is a stock. The gap is one input and one term in
+the same compounding loop, but scope froze at Avance 2, so it goes on the roadmap
+rather than into the build. Found 16 November, rehearsing, not coding.
