@@ -165,6 +165,13 @@ function formatCentavosAsMXN(amountCentavos) {
   return `MXN $${formattedPesos}.${remainingCentavos}`;
 }
 
+function formatCentavosAsPesoInput(amountCentavos) {
+  // Separate integer pesos and centavos so the prefilled peso input round-trips through the shared parser exactly.
+  const pesos = amountCentavos / 100n;
+  const centavos = (amountCentavos % 100n).toString().padStart(2, "0");
+  return `${pesos}.${centavos}`;
+}
+
 function parsePesosAsCentavos(amountText) {
   const cleanedAmount = amountText.trim();
   if (!/^\d+(?:\.\d{1,2})?$/.test(cleanedAmount)) {
@@ -235,7 +242,7 @@ answersForm.addEventListener("submit", (event) => {
   purposeAnswer = purpose;
   selectedHorizon = horizon;
   selectedRiskAnswer = riskAnswer;
-  contributionAmountInput.value = monthlySetAsideCentavos.toString();
+  contributionAmountInput.value = formatCentavosAsPesoInput(monthlySetAsideCentavos);
   answersError.hidden = true;
   renderAllocation();
   answersStep.hidden = true;
@@ -307,12 +314,12 @@ contributionForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
   const amountText = contributionAmountInput.value.trim();
-  if (!/^\d+$/.test(amountText)) {
-    contributionStatus.textContent = "Enter a positive whole number of centavos. The contribution remains pending.";
+  const amountCentavos = parsePesosAsCentavos(amountText);
+  if (amountCentavos === null) {
+    contributionStatus.textContent = "Enter the amount in pesos, using no more than two decimal places. The contribution remains pending.";
     return;
   }
 
-  const amountCentavos = BigInt(amountText);
   if (amountCentavos <= 0n) {
     contributionStatus.textContent = "Enter a positive amount. The contribution remains pending.";
     return;

@@ -47,8 +47,16 @@ One line per choice that is expensive to undo, with the reason.
 
   ## Funding
 
-  - **Raise MXN 550,000 on a SAFE, not shares.** The three valuation methods span
-  925k to 1.9M, roughly 2x. A SAFE sets no valuation today, so I do not have to
-  defend a point estimate I cannot support. At the midpoint it implies 28.9% sold.
-- **Three months of buffer, not six.** Six months would have pushed the raise to
-  800,000 and cost ~39% of the company for a hole that is only 285,000 deep.
+- **Raise MXN 550,000 on a SAFE, not on shares.** The three valuation methods span
+  MXN 925,000 to 1,907,000, roughly 2x. A SAFE sets no valuation today, so I do not
+  have to defend a point estimate I cannot support. At the midpoint of the three
+  methods it would imply 28.9% of the company sold, but a SAFE converts at the next
+  round's price, so that figure is reference, not a commitment.
+- **Three months of buffer, not six.** The deepest cash point is MXN 285,000 in
+  month 30. Six months of buffer would have pushed the raise to about 800,000 and
+  cost roughly 39% of the company for a hole that is only 285,000 deep. Three
+  months covers the hole with room and costs nine points less.
+- **The partner revenue share is modelled at 10%.** DECISIONS.md named the partner
+  before any model included its cut. Adding it moved gross margin from 90% to 80%,
+  LTV/CAC from 2.80x to 2.49x, and break-even from year 2 to year 4. The business
+  still works; it just works later.

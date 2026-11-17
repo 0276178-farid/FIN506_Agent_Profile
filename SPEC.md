@@ -218,17 +218,41 @@ Written down so the agent and I stop re-litigating it.
 - The product does not promise or pay a yield; any projection is shown labelled as
   an assumed scenario, not as a guarantee.
 - The execution guide explains how to operate a third party's application and what its
-  fields mean. It does not tell the user which security to buy. Teaching someone to use
-  a tool is not investment advice; naming an instrument would be. `TODO-verify`
+  fields mean. It does not tell the user which security to buy. Article 225 of the Ley
+  del Mercado de Valores reserves habitual, professional and *individualised*
+  recommendations on securities to registered advisers; explaining how an interface
+  works names no security and makes no recommendation. Naming an instrument would.
 - The product does not confirm on the user's behalf that an investment was made. It
   shows a position as pending until the user states the amount she transferred, so the
   interface never implies money is invested when it may not be.
 - Implied vehicle: no licence of my own. A real version would operate on a licensed
   partner (a casa de bolsa or a fund distributor), which would custody the money and
   execute the orders.
-- TODO-verify: if the product recommended specific securities, the asesor en
-  inversiones registration under the Ley del Mercado de Valores would apply. That is
-  why naming specific instruments is out of scope this semester.
+- If the product recommended specific securities, the asesor en inversiones
+  registration under article 225 of the Ley del Mercado de Valores would apply, and
+  the CNBV's Registro de Asesores en Inversiones is where that registration lives.
+  That is why naming specific instruments is out of scope this semester, and why it
+  is the first thing on the roadmap in LATER.md.
+
+### Verification status, 16 November 2026
+
+- **Asesor en inversiones.** Confirmed against the CNBV's own site. Article 225
+  of the Ley del Mercado de Valores requires registration with the Commission,
+  in the Registro de Asesores en Inversiones, for anyone who habitually and
+  professionally gives individualised investment recommendations on securities.
+  This is the basis for Money rule 3, and it is the registration Unstuck would
+  need the day it names an instrument.
+- **IFPE capital.** 500,000 UDIs for national currency only, 700,000 with foreign
+  currency or virtual assets, under articles 6 to 8 of the CUITF. Confirmed across
+  several law-firm and press sources, but I did not read the CUITF text itself, so
+  this is secondary, not primary.
+- **Bank capital.** Not verified. The figure is in the tens of millions of UDIs
+  and a bank is out of reach at this stage either way, so I removed the precise
+  number rather than cite one I had not checked.
+- **Exit multiple and discount rate.** Not verifiable. They are assumptions and
+  remain marked as such.
+
+None of this has been reviewed by a lawyer.
 
 ## Unit economics the model must show
 

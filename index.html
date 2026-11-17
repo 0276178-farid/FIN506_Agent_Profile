@@ -111,11 +111,11 @@
 
         <section class="contribution-confirmation" aria-labelledby="contribution-title">
           <h2 id="contribution-title">Confirm simulated contribution</h2>
-          <p class="guide-copy">Enter the amount you actually sent, in centavos. The suggested amount is filled in; change it if needed. Demo only: no real money moves.</p>
+          <p class="guide-copy">Enter the amount you actually sent in MXN pesos, using no more than two decimal places. The suggested amount is filled in; change it if needed. Demo only: no real money moves.</p>
           <form id="contribution-form">
-            <label for="contribution-amount">Amount sent (centavos)</label>
+            <label for="contribution-amount">Amount sent (MXN pesos)</label>
             <div class="confirmation-controls">
-              <input id="contribution-amount" name="amount" type="text" inputmode="numeric" autocomplete="off" required>
+              <input id="contribution-amount" name="amount" type="text" inputmode="decimal" autocomplete="off" required>
               <button class="primary-button" type="submit">Confirm amount</button>
             </div>
           </form>
