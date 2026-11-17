@@ -38,6 +38,28 @@ const riskLabels = {
   investMore: "I would invest more",
 };
 
+const projectionMonths = [12, 36, 60];
+const growthFactorScale = 1_000_000_000_000n;
+const annualRates = {
+  short: 0.07,
+  medium: 0.09,
+  long: 0.12,
+  bank: 0,
+};
+
+function deriveMonthlyGrowthFactor(annualRate) {
+  // Convert the annual rate to its gross monthly multiplier, then scale it once so balance growth never uses floating point.
+  const monthlyGrowthFactor = (1 + annualRate) ** (1 / 12);
+  return BigInt(Math.round(monthlyGrowthFactor * Number(growthFactorScale)));
+}
+
+const monthlyGrowthFactors = {
+  short: deriveMonthlyGrowthFactor(annualRates.short),
+  medium: deriveMonthlyGrowthFactor(annualRates.medium),
+  long: deriveMonthlyGrowthFactor(annualRates.long),
+  bank: deriveMonthlyGrowthFactor(annualRates.bank),
+};
+
 function getSuggestedPercentages(horizon, riskAnswer) {
   // This is the SPEC's starting mix (Money rule 1); the risk answer adjusts it afterwards (Money rule 2).
   const percentagesByHorizon = {
@@ -94,6 +116,46 @@ function splitAmountIntoBuckets(amountCentavos, percentages) {
   return buckets;
 }
 
+function projectBalances(confirmedAmountCentavos, percentages) {
+  const monthlyContributions = splitAmountIntoBuckets(confirmedAmountCentavos, percentages);
+  const balances = { short: 0n, medium: 0n, long: 0n, bank: 0n };
+  const results = { short: {}, medium: {}, long: {}, bank: {} };
+
+  for (let month = 1; month <= projectionMonths.at(-1); month += 1) {
+    for (const bucket of bucketDetails) {
+      // Round each bucket's fixed-point growth to the nearest centavo before adding this month's contribution.
+      balances[bucket.key] = (balances[bucket.key] * monthlyGrowthFactors[bucket.key] + growthFactorScale / 2n)
+        / growthFactorScale;
+      balances[bucket.key] += monthlyContributions.find((contribution) => contribution.key === bucket.key).amountCentavos;
+    }
+
+    // The bank earns 0%; add the same month's full contribution after growth, as the spec requires.
+    balances.bank = (balances.bank * monthlyGrowthFactors.bank + growthFactorScale / 2n) / growthFactorScale;
+    balances.bank += BigInt(confirmedAmountCentavos);
+
+    if (projectionMonths.includes(month)) {
+      for (const key of Object.keys(balances)) {
+        results[key][month] = balances[key];
+      }
+    }
+  }
+
+  return results;
+}
+
+function renderProjection(confirmedAmountCentavos) {
+  const percentages = getSuggestedPercentages(selectedHorizon, selectedRiskAnswer);
+  const results = projectBalances(confirmedAmountCentavos, percentages);
+
+  for (const key of Object.keys(results)) {
+    for (const month of projectionMonths) {
+      document.querySelector(`#projection-${key}-${month}`).textContent = formatCentavosAsMXN(results[key][month]);
+    }
+  }
+
+  document.querySelector("#projection-section").hidden = false;
+}
+
 function formatCentavosAsMXN(amountCentavos) {
   // Division and remainder by 100 separate whole pesos from centavos for display.
   const pesos = amountCentavos / 100n;
@@ -122,6 +184,12 @@ const answersForm = document.querySelector("#answers-form");
 const answersError = document.querySelector("#answers-error");
 const allocationSection = document.querySelector(".allocation");
 const contributionAmountInput = document.querySelector("#contribution-amount");
+
+document.querySelector("#answers-back").addEventListener("click", () => {
+  answersStep.hidden = true;
+  incomeStep.hidden = false;
+  document.querySelector("#income-title").focus();
+});
 
 incomeForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -253,6 +321,7 @@ contributionForm.addEventListener("submit", (event) => {
   simulatedContribution.amountCentavos = amountCentavos;
   simulatedContribution.status = "confirmed";
   renderAllocation();
+  renderProjection(amountCentavos);
   contributionAmountInput.disabled = true;
   confirmContributionButton.disabled = true;
   contributionStatus.textContent = `Confirmed in this demo for ${formatCentavosAsMXN(amountCentavos)}. The buckets above now use this amount. No real transfer occurred.`;

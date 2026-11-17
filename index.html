@@ -61,6 +61,7 @@
             <label><input type="radio" name="riskAnswer" value="investMore"> I would invest more</label>
           </fieldset>
           <p class="form-error" id="answers-error" role="alert" hidden></p>
+          <button class="secondary-button" id="answers-back" type="button">Back</button>
           <button class="primary-button" type="submit">See my suggested split</button>
         </form>
       </section>
@@ -119,6 +120,55 @@
             </div>
           </form>
           <p class="contribution-status" id="contribution-status" role="status" aria-live="polite">Pending. No amount has been confirmed.</p>
+        </section>
+
+        <section class="projection-section" id="projection-section" aria-labelledby="projection-title" hidden>
+          <div class="projection-heading">
+            <p class="eyebrow">06 <span>/</span> Projection</p>
+            <h2 id="projection-title">A scenario, not a promise or guarantee.</h2>
+            <p class="projection-copy">Starting at MXN $0, the confirmed monthly contribution is added at the end of each month.</p>
+          </div>
+          <p class="projection-rates">Assumed annual rates: Short 7%, Medium 9%, Long 12%, Bank 0%.</p>
+          <p class="projection-assumption-note">These rates are assumptions chosen for this scenario, not a forecast and not tied to any product.</p>
+          <div class="projection-table-wrap">
+            <table class="projection-table">
+              <caption>Projected balances in MXN</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Bucket</th>
+                  <th scope="col">12 months</th>
+                  <th scope="col">36 months</th>
+                  <th scope="col">60 months</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Short term</th>
+                  <td id="projection-short-12"></td>
+                  <td id="projection-short-36"></td>
+                  <td id="projection-short-60"></td>
+                </tr>
+                <tr>
+                  <th scope="row">Medium term</th>
+                  <td id="projection-medium-12"></td>
+                  <td id="projection-medium-36"></td>
+                  <td id="projection-medium-60"></td>
+                </tr>
+                <tr>
+                  <th scope="row">Long term</th>
+                  <td id="projection-long-12"></td>
+                  <td id="projection-long-36"></td>
+                  <td id="projection-long-60"></td>
+                </tr>
+                <tr>
+                  <th scope="row">Bank (0%)</th>
+                  <td id="projection-bank-12"></td>
+                  <td id="projection-bank-36"></td>
+                  <td id="projection-bank-60"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </section>
       </section>
 

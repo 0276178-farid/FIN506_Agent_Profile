@@ -144,3 +144,52 @@ decision below is mine.
   protects the record of my decisions, not a real person's name, and the name
   should never have been there.
 - Reviewer flags: not run; this change touches no code.
+
+## 2026-11-16
+
+Worked through the final build day. Four things happened that are worth recording.
+
+**A commit promised more than it delivered.** Commit 81ab292 is titled "Build
+steps 1 and 2: user inputs drive the allocation". It did not. The app still had
+one input, the step-5 confirmation, and app.js hardcoded demoHorizon and
+demoRiskAnswer on lines 2 and 3. I found this only because the builder refused to
+build step 6 on top of it and reported the gap instead of working around it. I
+verified it myself with git log and grep before accepting the claim. I did not
+rewrite the history: the commit stays, and the real work landed in the commit that
+follows it with almost the same message. Two near-identical messages in the log is
+the honest record of what happened.
+
+**The reviewer had approved that slice.** It did not catch the missing inputs,
+because it reviewed the code it was shown and nothing else. I changed how I brief
+it: from now on the review request says to check the slice against the core flow
+in SPEC.md, not only the code in front of it. The next review caught a stale
+paragraph in README.md that I would otherwise have shipped.
+
+**I rejected a reviewer finding, with a reason.** The reviewer reported the
+missing projection as a defect. It was task 3 of the approved plan and I had told
+the builder to stop before it. The reviewer runs with clean context and could not
+know that. This is the third finding I have rejected on argument rather than
+accepted by default.
+
+**The deck contradicted the model.** Slide 9 showed the VC method at MXN 981,000.
+The model says MXN 1,230,813. The slide was still subtracting an 800,000 raise
+from when the plan was six months of buffer; the raise became 550,000 when I cut
+the buffer to three months, and the slide was never updated. The sensitivity
+ladder beside it had the same stale subtraction in all five rows. Both are fixed
+and now match the Valuation tab exactly. The range and the midpoint were never
+wrong, because the midpoint was computed from the correct figure.
+
+**Decisions taken today.** The user types pesos, not centavos: Money rule 4
+governs how money is stored and calculated, not what the person types. Amounts
+with more than two decimal places are rejected rather than rounded, because
+quietly changing a number someone typed is worse than refusing it. The purpose is
+written to the page with textContent and never innerHTML.
+
+**The reviewer invented a regression.** It reported that step 6 had removed the
+Back control from the answers form, and cited index.html:46. git diff --stat
+showed index.html with 49 insertions and zero deletions in that slice, so nothing
+had been removed, and grep found the control alive at index.html:64. I cancelled
+the fix before a duplicate button was added. Two of today's findings had a false
+premise and one, the stale README paragraph, was real and worth having. The
+reviewer is an input, not a verdict, and a ten-second command settled a confident
+claim that a careful-sounding paragraph could not.

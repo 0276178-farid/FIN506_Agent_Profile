@@ -342,6 +342,94 @@ h1 {
   font-variant-numeric: tabular-nums;
 }
 
+.projection-section {
+  margin-top: 40px;
+  padding-top: 22px;
+  border-top: 1px solid var(--ink);
+}
+
+.projection-heading {
+  max-width: 620px;
+  margin-bottom: 20px;
+}
+
+.projection-heading .eyebrow {
+  margin-bottom: 10px;
+}
+
+.projection-heading h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.projection-copy,
+.projection-rates,
+.projection-assumption-note {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.projection-copy {
+  margin: 10px 0 0;
+}
+
+.projection-rates {
+  margin: 0 0 4px;
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.projection-assumption-note {
+  margin: 0 0 16px;
+}
+
+.projection-table-wrap {
+  overflow-x: auto;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.projection-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.projection-table caption {
+  padding: 10px 0;
+  color: var(--muted);
+  text-align: left;
+  font-size: 12px;
+}
+
+.projection-table th,
+.projection-table td {
+  padding: 12px 10px;
+  border-top: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.projection-table thead th {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.projection-table th:first-child {
+  text-align: left;
+}
+
+.projection-table tbody th {
+  font-weight: 650;
+}
+
 .allocation-next-step {
   display: flex;
   align-items: center;
