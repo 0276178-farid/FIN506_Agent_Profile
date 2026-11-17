@@ -193,3 +193,13 @@ the fix before a duplicate button was added. Two of today's findings had a false
 premise and one, the stale README paragraph, was real and worth having. The
 reviewer is an input, not a verdict, and a ten-second command settled a confident
 claim that a careful-sounding paragraph could not.
+
+**I was using a multiple the course had already given me.** Late in the day I
+finally read the Session 25 valuation deck and the Cuentas Claras P&L example. The
+deck shows public fintechs trading at a median of 2.4x revenue, range 1.3x to 6.8x.
+My comparables method used 3.0x, above that median with nothing behind it, and my
+own slide said "TODO-verify against Mexican comparables" when the comparison set
+had been handed out in class. I moved to 2.4x. It lowers my valuation by about
+MXN 380,000 and costs me two points of the company. The lesson is not about the
+number: it is that I treated the course material as background reading and the
+answer was in it.
