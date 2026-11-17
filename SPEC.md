@@ -249,8 +249,13 @@ Written down so the agent and I stop re-litigating it.
 - **Bank capital.** Not verified. The figure is in the tens of millions of UDIs
   and a bank is out of reach at this stage either way, so I removed the precise
   number rather than cite one I had not checked.
-- **Exit multiple and discount rate.** Not verifiable. They are assumptions and
-  remain marked as such.
+- **Comparable multiple.** 2.4x, the median revenue multiple of the public fintechs
+  presented in FIN506 Session 25 (range 1.3x to 6.8x). Verified against the course
+  material, 16 November 2026.
+- **Exit multiple and discount rate.** Assumptions. The 4.0x exit multiple sits
+  above the 2.4x class median because it prices a sale after five years of growth,
+  not the company as it stands; the sensitivity table on slide 9 shows what happens
+  between 2.0x and 6.0x.
 
 None of this has been reviewed by a lawyer.
 

@@ -48,10 +48,15 @@ One line per choice that is expensive to undo, with the reason.
   ## Funding
 
 - **Raise MXN 550,000 on a SAFE, not on shares.** The three valuation methods span
-  MXN 925,000 to 1,907,000, roughly 2x. A SAFE sets no valuation today, so I do not
-  have to defend a point estimate I cannot support. At the midpoint of the three
-  methods it would imply 28.9% of the company sold, but a SAFE converts at the next
-  round's price, so that figure is reference, not a commitment.
+  MXN 925,000 to 1,525,000. A SAFE sets no valuation today, so I do not have to
+  defend a point estimate I cannot support. At the midpoint of the three methods it
+  would imply 30.9% of the company sold, but a SAFE converts at the next round's
+  price, so that figure is reference, not a commitment.
+- **The comparable multiple is 2.4x, not a number I picked.** It is the median
+  revenue multiple of the public fintechs shown in FIN506 Session 25, whose range
+  runs from 1.3x to 6.8x. I had used 3.0x, which sat above that median with nothing
+  behind it. Using the class comparison set lowers my valuation by about 380,000
+  and costs me two points of the company, and it is the only version I can defend.
 - **Three months of buffer, not six.** The deepest cash point is MXN 285,000 in
   month 30. Six months of buffer would have pushed the raise to about 800,000 and
   cost roughly 39% of the company for a hole that is only 285,000 deep. Three
