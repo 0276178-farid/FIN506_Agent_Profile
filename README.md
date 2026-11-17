@@ -6,9 +6,17 @@ Unstuck turns a person's time horizon and tolerance for loss into a suggested sp
 
 Open `index.html` directly in a web browser. No server, installation, or build step is needed.
 
-## Demo inputs
+## Core flow
 
-The starting scenario is MXN 20,000.00 (2,000,000 centavos), a 2-to-5-year horizon, and “I would hold.” The suggested split is 40% short term, 40% medium term, and 20% long term. The guide and amount confirmation are simulated; no real transfer occurs.
+The user enters their monthly rental income, how much they can set aside, the purpose, their time horizon, and what they would do if the balance dropped 10%. Those answers drive the suggested split: the horizon sets the starting mix, and the risk answer adjusts it. The purpose is recorded and shown but does not change the split.
+
+## What is simulated and what is not
+
+Every institution, screen, and account number in the execution guide is invented. The destination shown is the string `NOT A REAL ACCOUNT - DEMO ONLY`.
+
+There is no sign-in or cross-user test. This is a static page with no server, database, or accounts, so there is no second user whose data could leak. The day the app stores anything, sign-in and that test come first.
+
+There are no pull requests in this repository because I work alone. Review is done by a separate reviewer session with clean context and recorded in `BITACORA.md`.
 
 ## Files
 

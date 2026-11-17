@@ -76,6 +76,93 @@ body {
   margin: 0 auto;
 }
 
+.flow-step {
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+
+.flow-form {
+  display: grid;
+  gap: 20px;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.text-field {
+  display: grid;
+  gap: 8px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.text-field input,
+.text-field textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--ink);
+  background: var(--white);
+  font: inherit;
+  font-weight: 400;
+}
+
+.text-field textarea {
+  resize: vertical;
+}
+
+.text-field input:focus,
+.text-field textarea:focus {
+  outline: 3px solid var(--medium);
+  outline-offset: 2px;
+}
+
+.choice-group {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.choice-group legend {
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.choice-group label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 8px 11px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--white);
+  font-size: 14px;
+}
+
+.choice-group input {
+  accent-color: var(--green);
+}
+
+.form-error {
+  margin: 0;
+  padding: 11px 13px;
+  border-left: 3px solid var(--long);
+  color: var(--ink);
+  background: #fff3ef;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
 .intro {
   max-width: 620px;
   margin-bottom: 34px;
@@ -460,6 +547,10 @@ h1 {
   .scenario {
     grid-template-columns: 1fr 1fr;
     gap: 17px 12px;
+  }
+
+  .field-grid {
+    grid-template-columns: 1fr;
   }
 
   .scenario div:first-child {

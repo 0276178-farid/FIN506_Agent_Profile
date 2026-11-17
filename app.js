@@ -1,7 +1,9 @@
-const demoAmountCentavos = 2_000_000;
-const demoHorizon = "twoToFiveYears";
-const demoRiskAnswer = "hold";
-const simulatedContribution = { amountCentavos: BigInt(demoAmountCentavos), status: "pending" };
+let monthlyIncomeCentavos = null;
+let monthlySetAsideCentavos = null;
+let purposeAnswer = "";
+let selectedHorizon = "";
+let selectedRiskAnswer = "";
+const simulatedContribution = { amountCentavos: null, status: "pending" };
 
 const bucketDetails = [
   {
@@ -101,16 +103,89 @@ function formatCentavosAsMXN(amountCentavos) {
   return `MXN $${formattedPesos}.${remainingCentavos}`;
 }
 
+function parsePesosAsCentavos(amountText) {
+  const cleanedAmount = amountText.trim();
+  if (!/^\d+(?:\.\d{1,2})?$/.test(cleanedAmount)) {
+    return null;
+  }
+
+  const [pesosText, centavosText = ""] = cleanedAmount.split(".");
+  // Convert the typed pesos and optional decimal digits directly to integer centavos without floating-point money math.
+  return BigInt(pesosText) * 100n + BigInt(centavosText.padEnd(2, "0") || "0");
+}
+
+const incomeStep = document.querySelector("#income-step");
+const incomeForm = document.querySelector("#income-form");
+const incomeError = document.querySelector("#income-error");
+const answersStep = document.querySelector("#answers-step");
+const answersForm = document.querySelector("#answers-form");
+const answersError = document.querySelector("#answers-error");
+const allocationSection = document.querySelector(".allocation");
+const contributionAmountInput = document.querySelector("#contribution-amount");
+
+incomeForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const income = parsePesosAsCentavos(document.querySelector("#monthly-income").value);
+  const setAside = parsePesosAsCentavos(document.querySelector("#monthly-set-aside").value);
+  if (income === null || setAside === null) {
+    incomeError.textContent = "Enter both amounts in pesos, using no more than two decimal places.";
+    incomeError.hidden = false;
+    return;
+  }
+  if (income <= 0n || setAside <= 0n) {
+    incomeError.textContent = "Both amounts must be greater than zero.";
+    incomeError.hidden = false;
+    return;
+  }
+  if (setAside > income) {
+    incomeError.textContent = "The monthly amount set aside cannot be greater than the monthly rental income.";
+    incomeError.hidden = false;
+    return;
+  }
+
+  monthlyIncomeCentavos = income;
+  monthlySetAsideCentavos = setAside;
+  incomeError.hidden = true;
+  incomeStep.hidden = true;
+  answersStep.hidden = false;
+  document.querySelector("#answers-title").focus();
+});
+
+answersForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const purpose = document.querySelector("#purpose-answer").value.trim();
+  const horizon = answersForm.querySelector('input[name="horizon"]:checked')?.value;
+  const riskAnswer = answersForm.querySelector('input[name="riskAnswer"]:checked')?.value;
+  if (!purpose || !horizon || !riskAnswer) {
+    answersError.textContent = "Enter a purpose and choose one time horizon and one response.";
+    answersError.hidden = false;
+    return;
+  }
+
+  purposeAnswer = purpose;
+  selectedHorizon = horizon;
+  selectedRiskAnswer = riskAnswer;
+  contributionAmountInput.value = monthlySetAsideCentavos.toString();
+  answersError.hidden = true;
+  renderAllocation();
+  answersStep.hidden = true;
+  allocationSection.hidden = false;
+  document.querySelector("#page-title").focus();
+});
+
 function renderAllocation() {
-  const percentages = getSuggestedPercentages(demoHorizon, demoRiskAnswer);
+  const percentages = getSuggestedPercentages(selectedHorizon, selectedRiskAnswer);
   const allocationAmountCentavos = simulatedContribution.status === "confirmed"
     ? simulatedContribution.amountCentavos
-    : BigInt(demoAmountCentavos);
+    : monthlySetAsideCentavos;
   const buckets = splitAmountIntoBuckets(allocationAmountCentavos, percentages);
 
   document.querySelector("#scenario-amount").textContent = formatCentavosAsMXN(allocationAmountCentavos);
-  document.querySelector("#scenario-horizon").textContent = horizonLabels[demoHorizon];
-  document.querySelector("#scenario-risk").textContent = riskLabels[demoRiskAnswer];
+  document.querySelector("#scenario-purpose").textContent = purposeAnswer;
+  document.querySelector("#scenario-horizon").textContent = horizonLabels[selectedHorizon];
+  document.querySelector("#scenario-risk").textContent = riskLabels[selectedRiskAnswer];
   document.querySelector("#allocation-total-label").textContent = simulatedContribution.status === "confirmed"
     ? "Total confirmed amount"
     : "Total suggested amount";
@@ -156,14 +231,10 @@ function renderAllocation() {
   }
 }
 
-renderAllocation();
-
 const contributionForm = document.querySelector("#contribution-form");
-const contributionAmountInput = document.querySelector("#contribution-amount");
 const contributionStatus = document.querySelector("#contribution-status");
 const confirmContributionButton = contributionForm.querySelector("button[type='submit']");
 
-contributionAmountInput.value = String(simulatedContribution.amountCentavos);
 contributionForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
@@ -187,7 +258,6 @@ contributionForm.addEventListener("submit", (event) => {
   contributionStatus.textContent = `Confirmed in this demo for ${formatCentavosAsMXN(amountCentavos)}. The buckets above now use this amount. No real transfer occurred.`;
 });
 
-const allocationSection = document.querySelector(".allocation");
 const executionGuide = document.querySelector("#execution-guide");
 const guideScreens = [...document.querySelectorAll(".guide-screen")];
 const guideStepCount = document.querySelector("#guide-step-count");
@@ -216,8 +286,11 @@ function returnToAllocation() {
 document.querySelector("#open-guide").addEventListener("click", () => {
   allocationSection.hidden = true;
   executionGuide.hidden = false;
-  document.querySelector("#guide-amount").textContent = formatCentavosAsMXN(BigInt(demoAmountCentavos));
-  document.querySelector("#guide-horizon").textContent = horizonLabels[demoHorizon];
+  const guideAmountCentavos = simulatedContribution.status === "confirmed"
+    ? simulatedContribution.amountCentavos
+    : monthlySetAsideCentavos;
+  document.querySelector("#guide-amount").textContent = formatCentavosAsMXN(guideAmountCentavos);
+  document.querySelector("#guide-horizon").textContent = horizonLabels[selectedHorizon];
   document.querySelector("#guide-title").focus();
   showGuideStep(0);
 });

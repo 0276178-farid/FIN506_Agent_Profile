@@ -12,10 +12,60 @@
     <main class="page-shell">
       <header class="topline">
         <a class="wordmark" href="index.html" aria-label="Unstuck home">unstuck<span>.</span></a>
-        <p class="demo-tag"><span aria-hidden="true"></span> Demo inputs</p>
+        <p class="demo-tag"><span aria-hidden="true"></span> Demo mode</p>
       </header>
 
-      <section class="allocation" aria-labelledby="page-title">
+      <section class="flow-step" id="income-step" aria-labelledby="income-title">
+        <div class="intro">
+          <p class="eyebrow">01 <span>/</span> Monthly amounts</p>
+          <h1 id="income-title" tabindex="-1">Start with the rent coming in.</h1>
+          <p class="intro-copy">Enter the monthly rental income and how much you can set aside.</p>
+        </div>
+        <form class="flow-form" id="income-form" novalidate>
+          <div class="field-grid">
+            <label class="text-field" for="monthly-income">
+              Monthly rental income (MXN pesos)
+              <input id="monthly-income" name="monthlyIncome" type="text" inputmode="decimal" autocomplete="off" placeholder="20000.00" aria-describedby="income-error">
+            </label>
+            <label class="text-field" for="monthly-set-aside">
+              Amount to set aside each month (MXN pesos)
+              <input id="monthly-set-aside" name="monthlySetAside" type="text" inputmode="decimal" autocomplete="off" placeholder="2000.00" aria-describedby="income-error">
+            </label>
+          </div>
+          <p class="form-error" id="income-error" role="alert" hidden></p>
+          <button class="primary-button" type="submit">Continue</button>
+        </form>
+      </section>
+
+      <section class="flow-step" id="answers-step" aria-labelledby="answers-title" hidden>
+        <div class="intro">
+          <p class="eyebrow">02 <span>/</span> Your answers</p>
+          <h1 id="answers-title" tabindex="-1">What is this money for?</h1>
+          <p class="intro-copy">Your purpose is recorded for context. The horizon sets the mix, and your response to a drop adjusts it.</p>
+        </div>
+        <form class="flow-form" id="answers-form" novalidate>
+          <label class="text-field" for="purpose-answer">
+            Purpose
+            <textarea id="purpose-answer" name="purpose" rows="3" required></textarea>
+          </label>
+          <fieldset class="choice-group">
+            <legend>When might you need this money?</legend>
+            <label><input type="radio" name="horizon" value="underTwoYears" required> Under 2 years</label>
+            <label><input type="radio" name="horizon" value="twoToFiveYears"> 2 to 5 years</label>
+            <label><input type="radio" name="horizon" value="overFiveYears"> Over 5 years</label>
+          </fieldset>
+          <fieldset class="choice-group">
+            <legend>What would you do if the balance fell 10%?</legend>
+            <label><input type="radio" name="riskAnswer" value="sell" required> I would sell</label>
+            <label><input type="radio" name="riskAnswer" value="hold"> I would hold</label>
+            <label><input type="radio" name="riskAnswer" value="investMore"> I would invest more</label>
+          </fieldset>
+          <p class="form-error" id="answers-error" role="alert" hidden></p>
+          <button class="primary-button" type="submit">See my suggested split</button>
+        </form>
+      </section>
+
+      <section class="allocation" aria-labelledby="page-title" hidden>
         <div class="intro">
           <p class="eyebrow">03 <span>/</span> Suggested allocation</p>
           <h1 id="page-title">Give each part of your money a time horizon.</h1>
@@ -24,8 +74,12 @@
 
         <dl class="scenario" aria-label="Answers used for this suggestion">
           <div>
-            <dt>Amount to invest</dt>
+            <dt>Monthly amount to set aside</dt>
             <dd id="scenario-amount"></dd>
+          </div>
+          <div>
+            <dt>Purpose</dt>
+            <dd id="scenario-purpose"></dd>
           </div>
           <div>
             <dt>Time horizon</dt>
