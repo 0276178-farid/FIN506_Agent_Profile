@@ -12,8 +12,28 @@
     <main class="page-shell">
       <header class="topline">
         <a class="wordmark" href="index.html" aria-label="Unstuck home">unstuck<span>.</span></a>
-        <p class="demo-tag"><span aria-hidden="true"></span> Demo mode</p>
+        <div class="topline-actions">
+          <p class="demo-tag"><span aria-hidden="true"></span> Demo mode</p>
+          <button class="reset-button" id="start-over" type="button">Start over</button>
+        </div>
       </header>
+
+      <p class="privacy-note">This data stays in this browser on this device. Nothing leaves it. There is no account or sign-in.</p>
+      <p class="storage-status" id="storage-status" role="status" hidden></p>
+
+      <section class="memory-record" id="memory-record" aria-labelledby="memory-record-title" hidden>
+        <div class="memory-record-heading">
+          <h2 id="memory-record-title">Your monthly record</h2>
+          <p id="reserve-record-status"></p>
+        </div>
+        <dl class="memory-summary">
+          <div><dt>Months completed</dt><dd id="months-completed"></dd></div>
+          <div><dt>Total transferred</dt><dd id="total-transferred"></dd></div>
+          <div><dt>Reserve today</dt><dd id="reserve-today"></dd></div>
+          <div><dt>Reserve target</dt><dd id="reserve-target"></dd></div>
+        </dl>
+        <div class="month-history" id="month-history"></div>
+      </section>
 
       <section class="flow-step" id="reserve-size-step" aria-labelledby="reserve-size-title">
         <div class="intro">

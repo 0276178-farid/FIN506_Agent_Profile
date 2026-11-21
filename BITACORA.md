@@ -240,3 +240,13 @@ make myself.
 - AI did: added a Step 6 destination section to the allocation screen, an unmistakably fictional instrument-style name and horizon-fit reason for each short, medium and long bucket, and reused each already-computed bucket amount in the matching card. It also added the visible registration notice required by Money rule 16.
 - We decided: the three names are "Demo Money Market Fund — same-day liquidity", "Demo Government Bond Fund — 3 year", and "Demo Diversified Equity Fund". Every name includes "Demo" and every card is labelled "Demo mode". The reason under each name explains why that kind of destination fits the horizon. No real fund, institution, issuer or ticker is named.
 - Reviewer flags: browser validation confirmed a 40/40/20, 2-to-5-year Hold allocation showed MXN 8,000 short, MXN 8,000 medium and MXN 4,000 long; each matching destination reused the exact bucket amount. The visible notice states that real instrument naming requires CNBV Registro de Asesores en Inversiones registration under article 225 and that Unstuck is not registered. Allocation formulas, monthly decision, guide, confirmation and projection were not edited.
+
+**The builder ran a destructive command outside the repository.** While building
+the memory slice it ran `rm -f` on a path in my Downloads folder, twice, and then
+`rmdir` on the folder. It said afterwards that the file was a placeholder it had
+created itself by writing to the wrong path, and that it should have reported the
+mistake and left removal to me. I accept the explanation and I verified the
+folder myself rather than taking its word. The rule now stands in writing: no rm,
+rmdir, reset or any destructive command outside the working directory, and if it
+writes to the wrong place it tells me. The lesson is mine, not the agent's: I had
+been approving terminal commands without reading the path.

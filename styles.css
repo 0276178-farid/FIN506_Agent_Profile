@@ -856,6 +856,122 @@ h1 {
   font-variant-numeric: tabular-nums;
 }
 
+.topline-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.reset-button {
+  min-height: 36px;
+  padding: 8px 11px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--ink);
+  background: var(--white);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.privacy-note,
+.storage-status {
+  margin: -48px 0 24px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.storage-status {
+  padding: 10px 12px;
+  border-left: 3px solid var(--medium);
+  background: #fff8e7;
+}
+
+.memory-record {
+  margin-bottom: 34px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--white);
+}
+
+.memory-record-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.memory-record-heading h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.memory-record-heading p {
+  margin: 0;
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.memory-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0 0;
+}
+
+.memory-summary div {
+  min-width: 0;
+}
+
+.memory-summary dt {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.memory-summary dd {
+  margin: 5px 0 0;
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.month-history {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.month-history-item {
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.month-history-item h3,
+.month-history-item p {
+  margin: 0;
+}
+
+.month-history-item h3 {
+  font-size: 14px;
+}
+
+.month-history-date {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.month-history-item p:last-child {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 @media (max-width: 600px) {
   .page-shell {
     width: min(100% - 32px, 460px);
@@ -933,6 +1049,19 @@ h1 {
 
   .destination-amount {
     text-align: left;
+  }
+
+  .topline-actions {
+    align-items: flex-end;
+  }
+
+  .memory-record-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .memory-summary {
+    grid-template-columns: 1fr 1fr;
   }
 }
 

@@ -281,6 +281,18 @@ reserveSizeForm.addEventListener("submit", (event) => {
   const reserve = calculateReserve(monthlyRent, unitCount, vacancyTenths, repairPercentage, propertyTax);
   targetReserveCentavos = reserve.targetCentavos;
 
+  savedReserveSetup = {
+    unitCount: unitCount.toString(),
+    monthlyRentCentavos: monthlyRent.toString(),
+    propertyTaxCentavos: propertyTax.toString(),
+    vacancyTenths: vacancyTenths.toString(),
+    repairPercentage: repairPercentage.toString(),
+    targetReserveCentavos: reserve.targetCentavos.toString(),
+  };
+  writeStoredState();
+  updateStorageStatus();
+  renderMemoryRecord();
+
   document.querySelector("#vacancy-allowance").textContent = formatCentavosAsMXN(reserve.vacancyAllowanceCentavos);
   document.querySelector("#repair-allowance").textContent = formatCentavosAsMXN(reserve.repairAllowanceCentavos);
   document.querySelector("#property-tax-allowance").textContent = formatCentavosAsMXN(reserve.propertyTaxCentavos);
@@ -320,6 +332,10 @@ reserveLocateForm.addEventListener("submit", (event) => {
     reserveLocateError.hidden = false;
     return;
   }
+
+  writeStoredState();
+  updateStorageStatus();
+  renderMemoryRecord();
 
   reserveLocateError.hidden = true;
   const comparison = document.querySelector("#reserve-comparison");
@@ -384,6 +400,7 @@ incomeForm.addEventListener("submit", (event) => {
 
   monthlyRentReceivedCentavos = rentReceived;
   monthlyCommittedCentavos = committed;
+  monthCompletionApplied = false;
   // Available is rent received minus what is already committed; it may be negative and is shown rather than hidden.
   monthlyAvailableCentavos = rentReceived - committed;
 
@@ -580,6 +597,33 @@ contributionForm.addEventListener("submit", (event) => {
   simulatedContribution.status = "confirmed";
   renderAllocation();
   renderProjection(amountCentavos);
+
+  if (!monthCompletionApplied && savedReserveSetup) {
+    // The reserve gets a top-up when available is positive. A drawdown happens only when commitments exceed rent.
+    // They are mutually exclusive, so at least one operation is zero in every month.
+    const reserveDrawdownCentavos = monthlyCommittedCentavos > monthlyRentReceivedCentavos
+      ? monthlyCommittedCentavos - monthlyRentReceivedCentavos
+      : 0n;
+
+    liquidCashCentavos = liquidCashCentavos + monthlyReserveTopUpCentavos - reserveDrawdownCentavos;
+    if (liquidCashCentavos < 0n) {
+      liquidCashCentavos = 0n;
+    }
+
+    completedMonths.push({
+      date: new Date().toLocaleDateString("en-CA"),
+      rentReceivedCentavos: monthlyRentReceivedCentavos.toString(),
+      committedCentavos: monthlyCommittedCentavos.toString(),
+      reserveTopUpCentavos: monthlyReserveTopUpCentavos.toString(),
+      transferredCentavos: amountCentavos.toString(),
+    });
+
+    monthCompletionApplied = true;
+    writeStoredState();
+    updateStorageStatus();
+    renderMemoryRecord();
+  }
+
   contributionAmountInput.disabled = true;
   confirmContributionButton.disabled = true;
   contributionStatus.textContent = `Confirmed in this demo for ${formatCentavosAsMXN(amountCentavos)}. The buckets above now use this amount. No real transfer occurred.`;
@@ -650,3 +694,211 @@ const destinationDetails = {
     reason: "It fits money that can stay invested longer and recover across market changes.",
   },
 };
+
+const storageKey = "unstuckMemoryV1";
+let savedReserveSetup = null;
+let completedMonths = [];
+let storageAvailable = true;
+let monthCompletionApplied = false;
+
+function readStoredState() {
+  try {
+    const storedText = localStorage.getItem(storageKey);
+    if (storedText === null) {
+      return null;
+    }
+
+    const parsedState = JSON.parse(storedText);
+    if (!parsedState || typeof parsedState !== "object") {
+      return null;
+    }
+
+    return parsedState;
+  } catch (error) {
+    storageAvailable = false;
+    return null;
+  }
+}
+
+function writeStoredState() {
+  if (!savedReserveSetup) {
+    return;
+  }
+
+  const serializableState = {
+    reserveSetup: savedReserveSetup,
+    reserveLevelCentavos: liquidCashCentavos === null ? null : liquidCashCentavos.toString(),
+    months: completedMonths,
+  };
+
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(serializableState));
+    storageAvailable = true;
+  } catch (error) {
+    storageAvailable = false;
+  }
+}
+
+function removeStoredState() {
+  try {
+    localStorage.removeItem(storageKey);
+    storageAvailable = true;
+  } catch (error) {
+    storageAvailable = false;
+  }
+}
+
+function readCentavoString(value, fieldName) {
+  if (typeof value !== "string" || !/^\d+$/.test(value)) {
+    throw new RangeError(`Invalid stored integer-centavo value: ${fieldName}`);
+  }
+  return BigInt(value);
+}
+
+function renderMemoryRecord() {
+  const record = document.querySelector("#memory-record");
+  const monthHistory = document.querySelector("#month-history");
+
+  if (!savedReserveSetup || liquidCashCentavos === null || targetReserveCentavos === null) {
+    record.hidden = true;
+    return;
+  }
+
+  record.hidden = false;
+  document.querySelector("#months-completed").textContent = String(completedMonths.length);
+
+  let totalTransferredCentavos = 0n;
+  for (const month of completedMonths) {
+    totalTransferredCentavos += BigInt(month.transferredCentavos);
+  }
+  document.querySelector("#total-transferred").textContent = formatCentavosAsMXN(totalTransferredCentavos);
+  document.querySelector("#reserve-today").textContent = formatCentavosAsMXN(liquidCashCentavos);
+  document.querySelector("#reserve-target").textContent = formatCentavosAsMXN(targetReserveCentavos);
+
+  const reserveStatus = document.querySelector("#reserve-record-status");
+  if (liquidCashCentavos === 0n) {
+    reserveStatus.textContent = "Your reserve is exhausted";
+  } else if (liquidCashCentavos < targetReserveCentavos) {
+    reserveStatus.textContent = `Reserve shortfall: ${formatCentavosAsMXN(targetReserveCentavos - liquidCashCentavos)}`;
+  } else {
+    reserveStatus.textContent = `Reserve at or above target`;
+  }
+
+  monthHistory.replaceChildren();
+  completedMonths.forEach((month, index) => {
+    const article = document.createElement("article");
+    article.className = "month-history-item";
+
+    const heading = document.createElement("h3");
+    heading.textContent = `Month ${index + 1}`;
+
+    const date = document.createElement("p");
+    date.className = "month-history-date";
+    date.textContent = month.date;
+
+    const details = document.createElement("p");
+    details.textContent = `Rent: ${formatCentavosAsMXN(BigInt(month.rentReceivedCentavos))} · Committed: ${formatCentavosAsMXN(BigInt(month.committedCentavos))} · Reserve: ${formatCentavosAsMXN(BigInt(month.reserveTopUpCentavos))} · Transferred: ${formatCentavosAsMXN(BigInt(month.transferredCentavos))}`;
+
+    article.append(heading, date, details);
+    monthHistory.append(article);
+  });
+}
+
+function updateStorageStatus() {
+  const status = document.querySelector("#storage-status");
+  if (!storageAvailable) {
+    status.textContent = "Memory is unavailable in this browser. This visit will work, but it will not be remembered.";
+    status.hidden = false;
+  } else {
+    status.hidden = true;
+  }
+}
+
+function restoreSavedState() {
+  const state = readStoredState();
+  if (!state) {
+    updateStorageStatus();
+    return;
+  }
+
+  try {
+    const setup = state.reserveSetup;
+    if (!setup || typeof setup !== "object") {
+      throw new RangeError("Saved reserve setup is missing.");
+    }
+
+    savedReserveSetup = setup;
+    targetReserveCentavos = readCentavoString(setup.targetReserveCentavos, "target reserve");
+    liquidCashCentavos = readCentavoString(state.reserveLevelCentavos, "reserve level");
+
+    if (!Array.isArray(state.months)) {
+      throw new RangeError("Saved month list is missing.");
+    }
+
+    completedMonths = state.months.map((month) => {
+      readCentavoString(month.rentReceivedCentavos, "month rent");
+      readCentavoString(month.committedCentavos, "month commitments");
+      readCentavoString(month.reserveTopUpCentavos, "month reserve top-up");
+      readCentavoString(month.transferredCentavos, "month transferred");
+      if (typeof month.date !== "string") {
+        throw new RangeError("Saved month date is missing.");
+      }
+      return month;
+    });
+
+    document.querySelector("#reserve-size-step").hidden = true;
+    document.querySelector("#reserve-locate-step").hidden = true;
+    document.querySelector("#income-step").hidden = false;
+    renderMemoryRecord();
+  } catch (error) {
+    savedReserveSetup = null;
+    targetReserveCentavos = null;
+    liquidCashCentavos = null;
+    completedMonths = [];
+  }
+
+  updateStorageStatus();
+}
+
+window.addEventListener("load", () => {
+  restoreSavedState();
+
+  document.querySelector("#start-over").addEventListener("click", () => {
+    removeStoredState();
+    savedReserveSetup = null;
+    completedMonths = [];
+    monthCompletionApplied = false;
+    targetReserveCentavos = null;
+    liquidCashCentavos = null;
+    monthlyRentReceivedCentavos = null;
+    monthlyCommittedCentavos = null;
+    monthlyAvailableCentavos = null;
+    monthlyReserveTopUpCentavos = null;
+    monthlyInvestableCentavos = null;
+    monthlySetAsideCentavos = null;
+    simulatedContribution.amountCentavos = null;
+    simulatedContribution.status = "pending";
+
+    document.querySelector("#memory-record").hidden = true;
+    document.querySelector("#reserve-size-step").hidden = false;
+    document.querySelector("#reserve-locate-step").hidden = true;
+    document.querySelector("#income-step").hidden = true;
+    document.querySelector("#answers-step").hidden = true;
+    document.querySelector(".allocation").hidden = true;
+    document.querySelector("#execution-guide").hidden = true;
+    document.querySelector("#monthly-decision").hidden = true;
+    document.querySelector("#contribution-status").textContent = "Pending. No amount has been confirmed.";
+    document.querySelector("#contribution-amount").disabled = false;
+    document.querySelector("#contribution-form").querySelector("button[type='submit']").disabled = false;
+    updateStorageStatus();
+    document.querySelector("#reserve-size-title").focus();
+
+    document.querySelector("#reserve-size-form").reset();
+    document.querySelector("#repair-percentage").value = "5";
+    document.querySelector("#reserve-locate-form").reset();
+    document.querySelector("#income-form").reset();
+    document.querySelector("#monthly-setaside-form").reset();
+    document.querySelector("#answers-form").reset();
+    document.querySelector("#contribution-form").reset();
+  });
+});
