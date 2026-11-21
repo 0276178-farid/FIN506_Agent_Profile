@@ -24,22 +24,29 @@ years or more. She is not stuck because she cannot invest; she is stuck because
 she has not found anyone she trusts to tell her where. Interview notes are kept
 outside the repository.
 
-## Core flow (the MVP)
+## Core flow
 
-The single flow that must work end to end at Demo Day:
+Setup, done once and revisited when something changes:
 
-1. The user enters her monthly rental income and how much of it she can set aside.
-2. She answers three questions: what the money is for, when she would need it, and
-   what she would do if the balance dropped 10 percent.
-3. The system shows a suggested allocation by time horizon (short / medium / long),
-   each explained in one sentence, with no specific instruments named.
-4. The app walks her through executing it: which account to open, what the institution
-   will ask her for, what each field on their screen means, and how to make the
-   transfer. She leaves the app, executes, and comes back.
-5. She confirms the transfer by entering the amount she actually sent. Until she does,
-   the position is shown as pending and is not counted as invested.
-6. She sees the projected balance at 12, 36 and 60 months, compared against leaving
-   the money in her bank account.
+1. **Size the reserve.** The person enters how many units they rent, the total
+   monthly rent, the annual property tax, and how long a unit typically sits empty
+   between tenants. Unstuck returns a target reserve, itemised.
+2. **Locate the reserve.** The person enters the cash they hold liquid today.
+   Unstuck returns the shortfall, or the excess that has been sitting idle.
+
+The monthly loop:
+
+3. **This month.** The person enters the rent actually received and the amounts
+   already committed this month.
+4. **The decision.** Available is rent received minus committed. If the reserve is
+   below target, the available amount tops it up first. Whatever remains is
+   investable.
+5. **The split.** The investable amount is divided across short, medium and long
+   term by the person's horizon and their answer to a 10% drop.
+6. **The destinations.** Each bucket is matched to a specific instrument.
+7. **Execution.** A guide walks the person through placing it at the institution.
+8. **Confirmation and record.** The person states what they actually sent, and the
+   month is stored, so the record builds across months.
 
 ## Data model (plain words)
 
@@ -138,11 +145,10 @@ Every rule below is implemented as a commented function.
    statement never holds a fraction of a centavo, and interest is credited rounded,
    so compounding on anything else would show a balance the institution could not
    actually hold.
-12. **Input limits.** Monthly rental income and the monthly set-aside must both be
-    positive whole-centavo amounts, and the set-aside may not exceed the income.
-    Money rule 10 makes the set-aside a share of what comes in each month, so a
-    set-aside larger than the income would describe money that does not exist.
-    Invalid values show a message and the flow does not continue.
+12. **Input limits.** Amounts are positive whole centavos. The amount set aside may
+    not exceed the available amount, which is rent received minus what is already
+    committed this month. The app says so when it does not. Because rental income is
+    irregular, this is recalculated every month rather than configured once.
 13. **Fixed-point growth factors.** A monthly growth factor is fractional, so
     applying it directly to a centavo balance would be floating-point arithmetic on
     money, which Money rule 4 forbids. Each factor is therefore derived once from the
@@ -150,6 +156,24 @@ Every rule below is implemented as a commented function.
     is then a BigInt balance times that whole number, divided by the same scale, with
     the result rounded to the nearest centavo per Money rule 11. Floating point
     appears only when the factor is first derived; it never touches a balance.
+14. **Reserve sizing.** The target reserve is the sum of three parts: a vacancy
+    allowance (vacancy months x average monthly rent per unit), a repair allowance
+    (a percentage of annual rent, default 5%), and the annual property tax. Every
+    input and the default belong to the person, and the screen shows each part
+    separately so the total is never a black box. The 5% default is an assumption.
+    TODO-verify
+
+15. **The reserve comes first.** When the held reserve is below target, the month's
+    available amount tops it up before anything is invested, and only the remainder
+    is investable. When the reserve is at or above target, the whole available
+    amount is investable, and any excess over target is investable the first time
+    it is detected.
+
+16. **Named instruments.** Unstuck names a specific instrument for each bucket.
+    This is what requires registration in the CNBV's Registro de Asesores en
+    Inversiones, under article 225 of the Ley del Mercado de Valores. Until that
+    registration exists, every instrument the app shows is invented and labelled
+    "Demo mode", exactly like the institution in the execution guide.
 
 ## The guide's fictional screens
 
