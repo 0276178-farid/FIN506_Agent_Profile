@@ -212,3 +212,9 @@ starts every projection at a zero balance and adds a monthly contribution, so th
 app models a flow and her money is a stock. The gap is one input and one term in
 the same compounding loop, but scope froze at Avance 2, so it goes on the roadmap
 rather than into the build. Found 16 November, rehearsing, not coding.
+
+## 2026-11-21
+- Goal: build the first part of the maintenance reserve core flow: sizing the reserve and locating it.
+- AI did: added reserve sizing and reserve-location screens to the existing static app, integer-centavo calculations using the existing peso parser, separate vacancy/repair/tax results, editable 5% repair assumption, shortfall/excess output, and mobile reserve styles.
+- We decided: reject only invalid inputs: non-numeric values, negative amounts or vacancy months, more than two decimal places for peso inputs, and a unit count below 1. No upper bounds were added. Vacancy months of 0 is valid. Unit count is checked before rent is divided. The repair allowance is percentage of annual rent, calculated as total monthly rent × 12 × the editable whole percentage. The existing allocation, guide, confirmation, and projection code was preserved without adding the monthly loop or reserve-first investment logic.
+- Reviewer flags: pending separate review; syntax diagnostics reported no HTML, CSS, or JavaScript file errors, browser testing confirmed the MXN 20,000 / 2 units / 1 month / 5% / MXN 30,000 tax example shows MXN 10,000 vacancy, MXN 12,000 repair, MXN 30,000 tax, and a MXN 52,000 target, and liquid cash of MXN 60,000 displays MXN 8,000 as money sitting idle. Node.js is not installed, so JavaScript syntax could not be checked with `node --check`; browser execution showed no page script error after restoring the existing DOM references.

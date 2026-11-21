@@ -15,9 +15,90 @@
         <p class="demo-tag"><span aria-hidden="true"></span> Demo mode</p>
       </header>
 
-      <section class="flow-step" id="income-step" aria-labelledby="income-title">
+      <section class="flow-step" id="reserve-size-step" aria-labelledby="reserve-size-title">
         <div class="intro">
-          <p class="eyebrow">01 <span>/</span> Monthly amounts</p>
+          <p class="eyebrow">01 <span>/</span> Maintenance reserve</p>
+          <h1 id="reserve-size-title" tabindex="-1">Size the reserve your property needs.</h1>
+          <p class="intro-copy">We will show each part separately, so you can see what makes up the target.</p>
+        </div>
+        <form class="flow-form" id="reserve-size-form" novalidate>
+          <div class="field-grid reserve-field-grid">
+            <label class="text-field" for="unit-count">
+              Number of rental units
+              <input id="unit-count" name="unitCount" type="text" inputmode="numeric" autocomplete="off" placeholder="2">
+            </label>
+            <label class="text-field" for="total-monthly-rent">
+              Total monthly rent (MXN pesos)
+              <input id="total-monthly-rent" name="monthlyRent" type="text" inputmode="decimal" autocomplete="off" placeholder="20000.00">
+            </label>
+            <label class="text-field" for="annual-property-tax">
+              Annual property tax (MXN pesos)
+              <input id="annual-property-tax" name="propertyTax" type="text" inputmode="decimal" autocomplete="off" placeholder="30000.00">
+            </label>
+            <label class="text-field" for="vacancy-months">
+              Months a unit sits empty
+              <input id="vacancy-months" name="vacancyMonths" type="text" inputmode="decimal" autocomplete="off" placeholder="1">
+            </label>
+            <label class="text-field" for="repair-percentage">
+              Repair allowance (%)
+              <input id="repair-percentage" name="repairPercentage" type="text" inputmode="numeric" autocomplete="off" value="5" aria-describedby="repair-assumption">
+            </label>
+          </div>
+          <p class="assumption-note" id="repair-assumption">The 5% repair percentage is a default assumption. TODO-verify</p>
+          <p class="form-error" id="reserve-size-error" role="alert" hidden></p>
+          <button class="primary-button" type="submit">Calculate my target reserve</button>
+        </form>
+
+        <section class="reserve-result" id="reserve-size-result" aria-label="Target maintenance reserve" hidden>
+          <h2>Your target maintenance reserve</h2>
+          <dl class="reserve-breakdown">
+            <div>
+              <dt>Vacancy allowance</dt>
+              <dd id="vacancy-allowance"></dd>
+            </div>
+            <div>
+              <dt>Repair allowance</dt>
+              <dd id="repair-allowance"></dd>
+            </div>
+            <div>
+              <dt>Annual property tax</dt>
+              <dd id="property-tax-allowance"></dd>
+            </div>
+          </dl>
+          <footer class="reserve-total">
+            <span>Target reserve</span>
+            <strong id="target-reserve"></strong>
+          </footer>
+          <button class="primary-button" id="continue-to-locate" type="button">Locate this reserve</button>
+        </section>
+      </section>
+
+      <section class="flow-step" id="reserve-locate-step" aria-labelledby="reserve-locate-title" hidden>
+        <div class="intro">
+          <p class="eyebrow">02 <span>/</span> Locate the reserve</p>
+          <h1 id="reserve-locate-title" tabindex="-1">How much of it is liquid today?</h1>
+          <p class="intro-copy">Enter cash you can use for this reserve today.</p>
+        </div>
+        <form class="flow-form" id="reserve-locate-form" novalidate>
+          <label class="text-field" for="liquid-cash">
+            Cash held liquid today (MXN pesos)
+            <input id="liquid-cash" name="liquidCash" type="text" inputmode="decimal" autocomplete="off" placeholder="200000.00">
+          </label>
+          <p class="form-error" id="reserve-locate-error" role="alert" hidden></p>
+          <button class="secondary-button" id="reserve-locate-back" type="button">Back</button>
+          <button class="primary-button" type="submit">Compare with my target</button>
+        </form>
+        <section class="reserve-comparison" id="reserve-comparison" aria-live="polite" hidden>
+          <h2 id="reserve-comparison-title"></h2>
+          <strong id="reserve-comparison-amount"></strong>
+          <p id="reserve-comparison-copy"></p>
+          <button class="primary-button" id="continue-after-reserve" type="button">Continue to monthly amounts</button>
+        </section>
+      </section>
+
+      <section class="flow-step" id="income-step" aria-labelledby="income-title" hidden>
+        <div class="intro">
+          <p class="eyebrow">03 <span>/</span> Monthly amounts</p>
           <h1 id="income-title" tabindex="-1">Start with the rent coming in.</h1>
           <p class="intro-copy">Enter the monthly rental income and how much you can set aside.</p>
         </div>
@@ -39,7 +120,7 @@
 
       <section class="flow-step" id="answers-step" aria-labelledby="answers-title" hidden>
         <div class="intro">
-          <p class="eyebrow">02 <span>/</span> Your answers</p>
+          <p class="eyebrow">04 <span>/</span> Your answers</p>
           <h1 id="answers-title" tabindex="-1">What is this money for?</h1>
           <p class="intro-copy">Your purpose is recorded for context. The horizon sets the mix, and your response to a drop adjusts it.</p>
         </div>
@@ -68,7 +149,7 @@
 
       <section class="allocation" aria-labelledby="page-title" hidden>
         <div class="intro">
-          <p class="eyebrow">03 <span>/</span> Suggested allocation</p>
+          <p class="eyebrow">05 <span>/</span> Suggested allocation</p>
           <h1 id="page-title">Give each part of your money a time horizon.</h1>
           <p class="intro-copy">Your suggested split follows when you expect to need the money.</p>
         </div>

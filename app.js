@@ -1,3 +1,5 @@
+let targetReserveCentavos = null;
+let liquidCashCentavos = null;
 let monthlyIncomeCentavos = null;
 let monthlySetAsideCentavos = null;
 let purposeAnswer = "";
@@ -182,6 +184,168 @@ function parsePesosAsCentavos(amountText) {
   // Convert the typed pesos and optional decimal digits directly to integer centavos without floating-point money math.
   return BigInt(pesosText) * 100n + BigInt(centavosText.padEnd(2, "0") || "0");
 }
+
+function parseWholeNumber(numberText) {
+  const cleanedText = numberText.trim();
+  if (!/^\d+$/.test(cleanedText)) {
+    return null;
+  }
+  return BigInt(cleanedText);
+}
+
+function parseVacancyMonthsAsTenths(numberText) {
+  const cleanedText = numberText.trim();
+  if (!/^\d+(?:\.\d)?$/.test(cleanedText)) {
+    return null;
+  }
+
+  const [wholeText, tenthText = ""] = cleanedText.split(".");
+  // Vacancy months is a plain quantity in tenths of a month, not money, so it stays integer arithmetic.
+  return BigInt(wholeText) * 10n + BigInt(tenthText || "0");
+}
+
+function roundPositiveQuotient(numeratorCentavos, divisor) {
+  // Round an exact integer-centavo division to the nearest centavo; a remainder at least half of the divisor rounds up.
+  if (numeratorCentavos < 0n) {
+    throw new RangeError("The division numerator must not be negative.");
+  }
+  if (divisor <= 0n) {
+    throw new RangeError("The division divisor must be greater than zero.");
+  }
+  const quotient = numeratorCentavos / divisor;
+  const remainder = numeratorCentavos % divisor;
+  return remainder * 2n >= divisor ? quotient + 1n : quotient;
+}
+
+function calculateReserve(monthlyRentCentavos, unitCount, vacancyTenths, repairPercentage, propertyTaxCentavos) {
+  // Guard the unit count first because it divides total monthly rent to find the average rent for one unit.
+  if (unitCount < 1n) {
+    throw new RangeError("The number of rental units must be at least 1.");
+  }
+
+  // Vacancy allowance = vacancy months × average monthly rent per unit; vacancy tenths are divided only at this final centavo rounding step.
+  const vacancyAllowanceCentavos = roundPositiveQuotient(
+    monthlyRentCentavos * vacancyTenths,
+    unitCount * 10n,
+  );
+
+  // Repair allowance = the editable whole percentage of ANNUAL rent. Annual rent is total monthly rent × 12.
+  const annualRentCentavos = monthlyRentCentavos * 12n;
+  const repairAllowanceCentavos = roundPositiveQuotient(
+    annualRentCentavos * repairPercentage,
+    100n,
+  );
+
+  const targetCentavos = vacancyAllowanceCentavos + repairAllowanceCentavos + propertyTaxCentavos;
+  return { vacancyAllowanceCentavos, repairAllowanceCentavos, propertyTaxCentavos, targetCentavos };
+}
+
+const reserveSizeStep = document.querySelector("#reserve-size-step");
+const reserveLocateStep = document.querySelector("#reserve-locate-step");
+const reserveSizeForm = document.querySelector("#reserve-size-form");
+const reserveSizeError = document.querySelector("#reserve-size-error");
+
+reserveSizeForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const unitCount = parseWholeNumber(document.querySelector("#unit-count").value);
+  const monthlyRent = parsePesosAsCentavos(document.querySelector("#total-monthly-rent").value);
+  const propertyTax = parsePesosAsCentavos(document.querySelector("#annual-property-tax").value);
+  const vacancyText = document.querySelector("#vacancy-months").value.trim();
+  const repairText = document.querySelector("#repair-percentage").value.trim();
+  const vacancyTenths = parseVacancyMonthsAsTenths(vacancyText);
+  const repairPercentage = parseWholeNumber(repairText);
+
+  if (unitCount === null || monthlyRent === null || propertyTax === null || vacancyTenths === null || repairPercentage === null) {
+    reserveSizeError.textContent = "Enter whole numbers for units and repair percentage. Enter vacancy months with no more than one decimal place. Enter every money amount in pesos with no more than two decimal places.";
+    reserveSizeError.hidden = false;
+    return;
+  }
+
+  if (unitCount < 1n) {
+    reserveSizeError.textContent = "Enter at least 1 rental unit. The unit count must be valid before it is used to divide the rent.";
+    reserveSizeError.hidden = false;
+    return;
+  }
+
+  if (monthlyRent < 0n || propertyTax < 0n || vacancyTenths < 0n || repairPercentage < 0n) {
+    reserveSizeError.textContent = "Amounts and counts cannot be negative.";
+    reserveSizeError.hidden = false;
+    return;
+  }
+
+  const reserve = calculateReserve(monthlyRent, unitCount, vacancyTenths, repairPercentage, propertyTax);
+  targetReserveCentavos = reserve.targetCentavos;
+
+  document.querySelector("#vacancy-allowance").textContent = formatCentavosAsMXN(reserve.vacancyAllowanceCentavos);
+  document.querySelector("#repair-allowance").textContent = formatCentavosAsMXN(reserve.repairAllowanceCentavos);
+  document.querySelector("#property-tax-allowance").textContent = formatCentavosAsMXN(reserve.propertyTaxCentavos);
+  document.querySelector("#target-reserve").textContent = formatCentavosAsMXN(reserve.targetCentavos);
+  reserveSizeError.hidden = true;
+  document.querySelector("#reserve-size-result").hidden = false;
+  document.querySelector("#continue-to-locate").focus();
+});
+
+document.querySelector("#continue-to-locate").addEventListener("click", () => {
+  reserveSizeStep.hidden = true;
+  reserveLocateStep.hidden = false;
+  document.querySelector("#reserve-locate-title").focus();
+});
+
+document.querySelector("#reserve-locate-back").addEventListener("click", () => {
+  reserveLocateStep.hidden = true;
+  reserveSizeStep.hidden = false;
+  document.querySelector("#reserve-size-title").focus();
+});
+
+const reserveLocateForm = document.querySelector("#reserve-locate-form");
+const reserveLocateError = document.querySelector("#reserve-locate-error");
+
+reserveLocateForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  liquidCashCentavos = parsePesosAsCentavos(document.querySelector("#liquid-cash").value);
+
+  if (liquidCashCentavos === null) {
+    reserveLocateError.textContent = "Enter the liquid cash in pesos, using no more than two decimal places.";
+    reserveLocateError.hidden = false;
+    return;
+  }
+
+  if (liquidCashCentavos < 0n) {
+    reserveLocateError.textContent = "Liquid cash cannot be negative.";
+    reserveLocateError.hidden = false;
+    return;
+  }
+
+  reserveLocateError.hidden = true;
+  const comparison = document.querySelector("#reserve-comparison");
+  const title = document.querySelector("#reserve-comparison-title");
+  const amount = document.querySelector("#reserve-comparison-amount");
+  const copy = document.querySelector("#reserve-comparison-copy");
+
+  if (liquidCashCentavos < targetReserveCentavos) {
+    title.textContent = "Reserve shortfall";
+    amount.textContent = formatCentavosAsMXN(targetReserveCentavos - liquidCashCentavos);
+    copy.textContent = "This is the amount needed to bring the cash held liquid up to the target reserve.";
+  } else if (liquidCashCentavos > targetReserveCentavos) {
+    title.textContent = "Money that has been sitting idle";
+    amount.textContent = formatCentavosAsMXN(liquidCashCentavos - targetReserveCentavos);
+    copy.textContent = "This excess is above the reserve target and may have been sitting idle in cash.";
+  } else {
+    title.textContent = "Reserve fully located";
+    amount.textContent = formatCentavosAsMXN(0n);
+    copy.textContent = "The liquid cash held today exactly matches the target reserve.";
+  }
+
+  comparison.hidden = false;
+  document.querySelector("#continue-after-reserve").focus();
+});
+
+document.querySelector("#continue-after-reserve").addEventListener("click", () => {
+  reserveLocateStep.hidden = true;
+  document.querySelector("#income-step").hidden = false;
+  document.querySelector("#income-title").focus();
+});
 
 const incomeStep = document.querySelector("#income-step");
 const incomeForm = document.querySelector("#income-form");
