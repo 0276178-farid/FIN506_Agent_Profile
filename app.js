@@ -1,6 +1,10 @@
 let targetReserveCentavos = null;
 let liquidCashCentavos = null;
-let monthlyIncomeCentavos = null;
+let monthlyRentReceivedCentavos = null;
+let monthlyCommittedCentavos = null;
+let monthlyAvailableCentavos = null;
+let monthlyReserveTopUpCentavos = null;
+let monthlyInvestableCentavos = null;
 let monthlySetAsideCentavos = null;
 let purposeAnswer = "";
 let selectedHorizon = "";
@@ -365,27 +369,104 @@ document.querySelector("#answers-back").addEventListener("click", () => {
 incomeForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
-  const income = parsePesosAsCentavos(document.querySelector("#monthly-income").value);
-  const setAside = parsePesosAsCentavos(document.querySelector("#monthly-set-aside").value);
-  if (income === null || setAside === null) {
-    incomeError.textContent = "Enter both amounts in pesos, using no more than two decimal places.";
+  const rentReceived = parsePesosAsCentavos(document.querySelector("#monthly-rent-received").value);
+  const committed = parsePesosAsCentavos(document.querySelector("#monthly-committed").value);
+  if (rentReceived === null || committed === null) {
+    incomeError.textContent = "Enter both monthly amounts in pesos, using no more than two decimal places.";
     incomeError.hidden = false;
     return;
   }
-  if (income <= 0n || setAside <= 0n) {
-    incomeError.textContent = "Both amounts must be greater than zero.";
-    incomeError.hidden = false;
-    return;
-  }
-  if (setAside > income) {
-    incomeError.textContent = "The monthly amount set aside cannot be greater than the monthly rental income.";
+  if (rentReceived < 0n || committed < 0n) {
+    incomeError.textContent = "Rent received and committed amounts cannot be negative.";
     incomeError.hidden = false;
     return;
   }
 
-  monthlyIncomeCentavos = income;
-  monthlySetAsideCentavos = setAside;
+  monthlyRentReceivedCentavos = rentReceived;
+  monthlyCommittedCentavos = committed;
+  // Available is rent received minus what is already committed; it may be negative and is shown rather than hidden.
+  monthlyAvailableCentavos = rentReceived - committed;
+
+  if (liquidCashCentavos < targetReserveCentavos) {
+    const shortfallCentavos = targetReserveCentavos - liquidCashCentavos;
+    const positiveAvailableCentavos = monthlyAvailableCentavos > 0n ? monthlyAvailableCentavos : 0n;
+    // The reserve gets only the smaller of this month's positive available amount and the remaining shortfall.
+    monthlyReserveTopUpCentavos = positiveAvailableCentavos < shortfallCentavos
+      ? positiveAvailableCentavos
+      : shortfallCentavos;
+  } else {
+    // At or above target, no monthly top-up is taken; the whole positive available amount remains investable.
+    monthlyReserveTopUpCentavos = 0n;
+  }
+
+  // Investable is available after the top-up. Negative or zero available never becomes negative investable.
+  monthlyInvestableCentavos = monthlyAvailableCentavos > monthlyReserveTopUpCentavos
+    ? monthlyAvailableCentavos - monthlyReserveTopUpCentavos
+    : 0n;
+
+  document.querySelector("#monthly-rent-line").textContent = formatCentavosAsMXN(rentReceived);
+  document.querySelector("#monthly-committed-line").textContent = formatCentavosAsMXN(committed);
+  document.querySelector("#monthly-available-line").textContent = formatCentavosAsMXN(monthlyAvailableCentavos);
+
+  const reserveStatus = liquidCashCentavos < targetReserveCentavos
+    ? `Shortfall: ${formatCentavosAsMXN(targetReserveCentavos - liquidCashCentavos)} · Held: ${formatCentavosAsMXN(liquidCashCentavos)} · Target: ${formatCentavosAsMXN(targetReserveCentavos)}`
+    : `At or above target · Held: ${formatCentavosAsMXN(liquidCashCentavos)} · Target: ${formatCentavosAsMXN(targetReserveCentavos)}`;
+  document.querySelector("#monthly-reserve-status").textContent = reserveStatus;
+  document.querySelector("#monthly-reserve-topup").textContent = formatCentavosAsMXN(monthlyReserveTopUpCentavos);
+  document.querySelector("#monthly-investable-line").textContent = formatCentavosAsMXN(monthlyInvestableCentavos);
+
   incomeError.hidden = true;
+  const setAsideControls = document.querySelector("#monthly-setaside-controls");
+  const noInvestment = document.querySelector("#monthly-no-investment");
+
+  if (monthlyInvestableCentavos === 0n) {
+    setAsideControls.hidden = true;
+    noInvestment.hidden = false;
+    if (liquidCashCentavos < targetReserveCentavos && monthlyReserveTopUpCentavos > 0n) {
+      noInvestment.textContent = "There is nothing to invest this month. The available money went to the reserve to restore the shortfall. Next month's surplus will top up the reserve first; only the remainder can be invested.";
+    } else {
+      noInvestment.textContent = "There is nothing to invest this month. The available amount was zero or commitments exceeded rent. Next month's surplus will top up the reserve first; only the remainder can be invested.";
+    }
+  } else {
+    setAsideControls.hidden = false;
+    noInvestment.hidden = true;
+    const setAsideInput = document.querySelector("#monthly-set-aside");
+    setAsideInput.value = formatCentavosAsPesoInput(monthlyInvestableCentavos);
+  }
+
+  document.querySelector("#monthly-decision").hidden = false;
+  document.querySelector(monthlyInvestableCentavos === 0n ? "#monthly-no-investment" : "#monthly-set-aside").focus();
+});
+
+const monthlySetAsideForm = document.querySelector("#monthly-setaside-form");
+const monthlySetAsideError = document.querySelector("#monthly-setaside-error");
+
+monthlySetAsideForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  if (monthlyInvestableCentavos === 0n) {
+    return;
+  }
+
+  const setAside = parsePesosAsCentavos(document.querySelector("#monthly-set-aside").value);
+  if (setAside === null) {
+    monthlySetAsideError.textContent = "Enter the amount in pesos, using no more than two decimal places.";
+    monthlySetAsideError.hidden = false;
+    return;
+  }
+  if (setAside <= 0n) {
+    monthlySetAsideError.textContent = "Enter a positive amount to set aside.";
+    monthlySetAsideError.hidden = false;
+    return;
+  }
+  if (setAside > monthlyInvestableCentavos) {
+    monthlySetAsideError.textContent = `The amount set aside cannot exceed the investable amount of ${formatCentavosAsMXN(monthlyInvestableCentavos)}.`;
+    monthlySetAsideError.hidden = false;
+    return;
+  }
+
+  monthlySetAsideCentavos = setAside;
+  monthlySetAsideError.hidden = true;
   incomeStep.hidden = true;
   answersStep.hidden = false;
   document.querySelector("#answers-title").focus();

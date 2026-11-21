@@ -98,24 +98,51 @@
 
       <section class="flow-step" id="income-step" aria-labelledby="income-title" hidden>
         <div class="intro">
-          <p class="eyebrow">03 <span>/</span> Monthly amounts</p>
-          <h1 id="income-title" tabindex="-1">Start with the rent coming in.</h1>
-          <p class="intro-copy">Enter the monthly rental income and how much you can set aside.</p>
+          <p class="eyebrow">03 <span>/</span> This month</p>
+          <h1 id="income-title" tabindex="-1">Start with the rent this month.</h1>
+          <p class="intro-copy">Enter what arrived and what was already committed before choosing anything to invest.</p>
         </div>
         <form class="flow-form" id="income-form" novalidate>
           <div class="field-grid">
-            <label class="text-field" for="monthly-income">
-              Monthly rental income (MXN pesos)
-              <input id="monthly-income" name="monthlyIncome" type="text" inputmode="decimal" autocomplete="off" placeholder="20000.00" aria-describedby="income-error">
+            <label class="text-field" for="monthly-rent-received">
+              Rent actually received this month (MXN pesos)
+              <input id="monthly-rent-received" name="rentReceived" type="text" inputmode="decimal" autocomplete="off" placeholder="20000.00">
             </label>
-            <label class="text-field" for="monthly-set-aside">
-              Amount to set aside each month (MXN pesos)
-              <input id="monthly-set-aside" name="monthlySetAside" type="text" inputmode="decimal" autocomplete="off" placeholder="2000.00" aria-describedby="income-error">
+            <label class="text-field" for="monthly-committed">
+              Already committed this month (MXN pesos)
+              <input id="monthly-committed" name="committed" type="text" inputmode="decimal" autocomplete="off" placeholder="5000.00" aria-describedby="monthly-committed-help">
             </label>
           </div>
+          <p class="assumption-note" id="monthly-committed-help">Include maintenance, repairs, property tax, or costs caused by a vacant unit.</p>
           <p class="form-error" id="income-error" role="alert" hidden></p>
-          <button class="primary-button" type="submit">Continue</button>
+          <button class="primary-button" type="submit">Calculate this month's decision</button>
         </form>
+
+        <section class="monthly-decision" id="monthly-decision" aria-labelledby="monthly-decision-title" hidden>
+          <p class="eyebrow">04 <span>/</span> The decision</p>
+          <h2 id="monthly-decision-title">What is available for the reserve and investing?</h2>
+          <dl class="monthly-breakdown">
+            <div><dt>Rent received</dt><dd id="monthly-rent-line"></dd></div>
+            <div><dt>Less: already committed</dt><dd id="monthly-committed-line"></dd></div>
+            <div class="monthly-result"><dt>Available</dt><dd id="monthly-available-line"></dd></div>
+            <div><dt>Held reserve / target reserve</dt><dd id="monthly-reserve-status"></dd></div>
+            <div><dt>Applied to reserve this month</dt><dd id="monthly-reserve-topup"></dd></div>
+            <div class="monthly-result"><dt>Investable amount</dt><dd id="monthly-investable-line"></dd></div>
+          </dl>
+
+          <div id="monthly-setaside-controls">
+            <form class="flow-form" id="monthly-setaside-form" novalidate>
+              <label class="text-field" for="monthly-set-aside">
+                Amount to set aside this month (MXN pesos)
+                <input id="monthly-set-aside" name="monthlySetAside" type="text" inputmode="decimal" autocomplete="off">
+              </label>
+              <p class="form-error" id="monthly-setaside-error" role="alert" hidden></p>
+              <button class="primary-button" type="submit">Continue to my answers</button>
+            </form>
+          </div>
+
+          <p class="monthly-no-investment" id="monthly-no-investment" role="status" hidden></p>
+        </section>
       </section>
 
       <section class="flow-step" id="answers-step" aria-labelledby="answers-title" hidden>

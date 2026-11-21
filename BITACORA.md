@@ -218,3 +218,19 @@ rather than into the build. Found 16 November, rehearsing, not coding.
 - AI did: added reserve sizing and reserve-location screens to the existing static app, integer-centavo calculations using the existing peso parser, separate vacancy/repair/tax results, editable 5% repair assumption, shortfall/excess output, and mobile reserve styles.
 - We decided: reject only invalid inputs: non-numeric values, negative amounts or vacancy months, more than two decimal places for peso inputs, and a unit count below 1. No upper bounds were added. Vacancy months of 0 is valid. Unit count is checked before rent is divided. The repair allowance is percentage of annual rent, calculated as total monthly rent × 12 × the editable whole percentage. The existing allocation, guide, confirmation, and projection code was preserved without adding the monthly loop or reserve-first investment logic.
 - Reviewer flags: pending separate review; syntax diagnostics reported no HTML, CSS, or JavaScript file errors, browser testing confirmed the MXN 20,000 / 2 units / 1 month / 5% / MXN 30,000 tax example shows MXN 10,000 vacancy, MXN 12,000 repair, MXN 30,000 tax, and a MXN 52,000 target, and liquid cash of MXN 60,000 displays MXN 8,000 as money sitting idle. Node.js is not installed, so JavaScript syntax could not be checked with `node --check`; browser execution showed no page script error after restoring the existing DOM references.
+**The builder refused to plan against a rule I had written badly.** I asked it to
+keep the reserve excess out of the monthly investable amount. It stopped and said
+that contradicted Money rule 15 and that the SPEC had to be corrected first,
+rather than quietly building what I asked. It was right: I had written rule 15
+conflating a one-time release with recurring monthly flow, and folding the excess
+into month one would have compounded it as if it recurred, because Money rule 11
+starts the projection at zero. I rewrote the rule, then it continued. This is the
+sixth time the builder has refused to plan because something was unspecified or
+contradictory, and every one of those refusals turned into a decision I had to
+make myself.
+
+## 2026-11-21 · Monthly loop
+- Goal: build core-flow Steps 3 and 4, this month and the reserve-first decision.
+- AI did: replaced the old monthly rental-income input with rent actually received and a combined already-committed amount; added integer-centavo available, reserve top-up and investable calculations; added an itemized monthly decision screen; and connected a positive set-aside to the existing answers flow.
+- We decided: commitments may exceed rent and the negative available amount is shown, but investable becomes zero. If investable is zero, no set-aside input or allocation-continue control is shown; the screen says there is nothing to invest and explains that next month's surplus tops up the reserve first. When investable is above zero, set-aside remains positive and cannot exceed investable. The reserve excess remains separate and does not enter monthly investable.
+- Reviewer flags: browser validation confirmed MXN 20,000 rent less MXN 5,000 commitments shows MXN 15,000 available, MXN 12,000 reserve top-up and MXN 3,000 investable under a MXN 40,000 held / MXN 52,000 target example. A negative available example showed MXN 0 investable and hid the set-aside controls. An over-limit set-aside showed the investable ceiling visibly. Existing allocation, guide, confirmation and projection code was not edited.

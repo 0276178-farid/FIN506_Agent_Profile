@@ -711,6 +711,67 @@ h1 {
   line-height: 1.5;
 }
 
+.monthly-decision {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--white);
+}
+
+.monthly-decision h2 {
+  margin: 0 0 16px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.monthly-breakdown {
+  display: grid;
+  gap: 9px;
+  margin: 0 0 20px;
+}
+
+.monthly-breakdown div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.monthly-breakdown dt {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.monthly-breakdown dd {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.monthly-breakdown .monthly-result {
+  margin-top: 4px;
+  border-top: 2px solid var(--ink);
+  border-bottom: 0;
+}
+
+.monthly-breakdown .monthly-result dd {
+  font-size: 20px;
+}
+
+.monthly-no-investment {
+  margin: 18px 0 0;
+  padding: 13px;
+  border-left: 3px solid var(--green);
+  background: #edf4ef;
+  line-height: 1.5;
+}
+
 @media (max-width: 600px) {
   .page-shell {
     width: min(100% - 32px, 460px);

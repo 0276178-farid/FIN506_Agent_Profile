@@ -163,11 +163,12 @@ Every rule below is implemented as a commented function.
     separately so the total is never a black box. The 5% default is an assumption.
     TODO-verify
 
-15. **The reserve comes first.** When the held reserve is below target, the month's
-    available amount tops it up before anything is invested, and only the remainder
-    is investable. When the reserve is at or above target, the whole available
-    amount is investable, and any excess over target is investable the first time
-    it is detected.
+15. **The reserve comes first, and the excess is separate.** When the held reserve
+    is below target, the month's available amount tops up the shortfall before
+    anything is invested, and only the remainder is investable. When the reserve
+    is at or above target, the whole available amount is investable. Any excess
+    held above target is a one-time release, not monthly flow: it is reported and
+    allocated on its own, and it never enters the monthly investable amount.
 
 16. **Named instruments.** Unstuck names a specific instrument for each bucket.
     This is what requires registration in the CNBV's Registro de Asesores en
