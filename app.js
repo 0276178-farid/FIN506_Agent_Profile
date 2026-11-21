@@ -548,6 +548,12 @@ function renderAllocation() {
 
     article.append(copy, numbers, track);
     bucketList.append(article);
+
+    const destination = document.querySelector(`#destination-${bucket.key}`);
+    destination.querySelector(".destination-name").textContent = destinationDetails[bucket.key].name;
+    destination.querySelector(".destination-reason").textContent = destinationDetails[bucket.key].reason;
+    // Reuse the already-split bucket amount; destination naming does not change or recalculate the allocation.
+    destination.querySelector(".destination-amount strong").textContent = formatCentavosAsMXN(bucket.amountCentavos);
   }
 }
 
@@ -629,3 +635,18 @@ document.querySelector("#guide-next").addEventListener("click", () => {
 });
 
 document.querySelector("#guide-return").addEventListener("click", returnToAllocation);
+
+const destinationDetails = {
+  short: {
+    name: "Demo Money Market Fund — same-day liquidity",
+    reason: "It keeps money close and easy to reach when the short horizon may require it soon.",
+  },
+  medium: {
+    name: "Demo Government Bond Fund — 3 year",
+    reason: "A three-year path matches money that can remain invested for a few years.",
+  },
+  long: {
+    name: "Demo Diversified Equity Fund",
+    reason: "It fits money that can stay invested longer and recover across market changes.",
+  },
+};

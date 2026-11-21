@@ -772,6 +772,90 @@ h1 {
   line-height: 1.5;
 }
 
+.destination-section {
+  margin-top: 40px;
+  padding-top: 22px;
+  border-top: 1px solid var(--ink);
+}
+
+.destination-heading h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.destination-notice {
+  margin: 18px 0;
+  padding: 14px 16px;
+  border-left: 4px solid var(--medium);
+  background: #fff8e7;
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+.destination-list {
+  display: grid;
+  gap: 9px;
+}
+
+.destination-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+  padding: 17px 19px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--green);
+  border-radius: 5px;
+  background: var(--white);
+}
+
+.destination-bucket {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+.destination-name {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.destination-reason {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.destination-amount {
+  min-width: 106px;
+  text-align: right;
+}
+
+.destination-amount span,
+.destination-amount strong {
+  display: block;
+}
+
+.destination-amount span {
+  margin-bottom: 4px;
+  color: var(--medium);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.destination-amount strong {
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+}
+
 @media (max-width: 600px) {
   .page-shell {
     width: min(100% - 32px, 460px);
@@ -841,6 +925,14 @@ h1 {
   .reserve-breakdown dd,
   .reserve-total strong {
     text-align: right;
+  }
+
+  .destination-card {
+    grid-template-columns: 1fr;
+  }
+
+  .destination-amount {
+    text-align: left;
   }
 }
 
