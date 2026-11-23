@@ -94,3 +94,15 @@ One line per choice that is expensive to undo, with the reason.
   reserve and each month on the person's own device. A password over localStorage
   protects nothing from anyone who opens the developer tools, so building one
   would have been theatre. Named as a gap, not hidden.
+  - No sign-in. The app is a static page on GitHub Pages with no server
+  and no database. A password would be compared in JavaScript that any
+  visitor can read, and the session would live in the same localStorage
+  it claims to protect — the appearance of security without the thing
+  itself. The data never leaves the device, so there is no server-side
+  store to protect. Sign-in belongs with the backend, and the backend
+  belongs with the CNBV registration and real custody integration.
+  - The record lives in one browser on one device. The calculation is
+  portable because it is recomputed from the person's own inputs, but
+  the month history does not travel. Both the history and the sign-in
+  require the same thing — a server — and both belong to the version
+  that has one.
