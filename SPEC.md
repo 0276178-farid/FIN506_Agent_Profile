@@ -139,16 +139,18 @@ Every rule below is implemented as a commented function.
     receives the same contributions and grows at 0%, so its balance is simply the
     contribution times the number of months. Everything in integer centavos, with
     the remainder rule in Money rule 5.    
-   Rounding within the projection: each bucket's balance is rounded to the nearest
-   whole centavo after the month's growth is applied, and the contribution is added
-   after that. The next month compounds on the rounded balance. A real account
-   statement never holds a fraction of a centavo, and interest is credited rounded,
-   so compounding on anything else would show a balance the institution could not
-   actually hold.
+    Rounding within the projection: each bucket's balance is rounded to the nearest
+    whole centavo after the month's growth is applied, and the contribution is added
+    after that. The next month compounds on the rounded balance. A real account
+    statement never holds a fraction of a centavo, and interest is credited rounded,
+    so compounding on anything else would show a balance the institution could not
+    actually hold.
+
 12. **Input limits.** Amounts are positive whole centavos. The amount set aside may
     not exceed the available amount, which is rent received minus what is already
     committed this month. The app says so when it does not. Because rental income is
     irregular, this is recalculated every month rather than configured once.
+
 13. **Fixed-point growth factors.** A monthly growth factor is fractional, so
     applying it directly to a centavo balance would be floating-point arithmetic on
     money, which Money rule 4 forbids. Each factor is therefore derived once from the
@@ -156,6 +158,7 @@ Every rule below is implemented as a commented function.
     is then a BigInt balance times that whole number, divided by the same scale, with
     the result rounded to the nearest centavo per Money rule 11. Floating point
     appears only when the factor is first derived; it never touches a balance.
+
 14. **Reserve sizing.** The target reserve is the sum of three parts: a vacancy
     allowance (vacancy months x average monthly rent per unit), a repair allowance
     (a percentage of annual rent, default 7%), and the annual property tax. Every
@@ -163,7 +166,7 @@ Every rule below is implemented as a commented function.
     separately so the total is never a black box. The 7% default comes from the
     landlord I interviewed, who pays for appliances in her furnished units and
     nothing in her unfurnished ones.
-
+    
 15. **The reserve comes first, and the excess is separate.** When the held reserve
     is below target, the month's available amount tops up the shortfall before
     anything is invested, and only the remainder is investable. When the reserve

@@ -297,4 +297,4 @@ from 5.0 to 3.3 months, and the stake sold from 31% to 22%.
 the average rent per unit. Her units range from 15,000 to 110,806, so if the
 largest goes empty the allowance covers less than half the loss. The average works
 for an even portfolio and hers is not one. On the roadmap: size vacancy on the
-largest unit, not the average.
+largest unit, not the average
