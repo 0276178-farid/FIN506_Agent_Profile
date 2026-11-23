@@ -65,3 +65,32 @@ One line per choice that is expensive to undo, with the reason.
   before any model included its cut. Adding it moved gross margin from 90% to 80%,
   LTV/CAC from 2.80x to 2.49x, and break-even from year 2 to year 4. The business
   still works; it just works later.
+
+## The product, redefined (22 November 2026)
+
+- **The product sizes a maintenance reserve, it does not just suggest a split.**
+  The interview said the MXN 200,000 was never idle money: it was a maintenance
+  reserve she had never calculated. Running her real numbers showed she needs
+  854,107 and holds 200,000. The product that matters is the one that tells her
+  that.
+- **The customer is a landlord, defined by irregular income.** Every savings app
+  automates a fixed rule off a salary. Rent arrives late, incomplete, or not at
+  all, and expenses arrive in lumps, so a fixed rule is unsafe. That is why she
+  never automated, and it is the gap nobody serves.
+- **Register as an asesor en inversiones, article 225 LMV.** Her one firm request
+  was to be told exactly where. A filtered list is an individualised
+  recommendation, and Fintual holds the same registration for the same reason.
+  The cost is an estimated MXN 180,000 once and 18,000 a month, both in the P&L
+  and both marked TODO-verify.
+- **The three noes still hold.** An adviser does not custody, lend, or pay a
+  yield. The money line and the advice line are different laws, and the business
+  crosses only the second.
+- **Price at MXN 299 a month, flat, not a percentage of assets.** At 199 the
+  compliance cost made the business sell 65% of itself and never recover in five
+  years. A percentage earns almost nothing from a client in year one and too much
+  in year ten, and it pays me to gather assets rather than to tell the truth —
+  which is the incentive her last adviser had, and she fired her.
+- **Persistence through localStorage, and no sign-in.** The app remembers the
+  reserve and each month on the person's own device. A password over localStorage
+  protects nothing from anyone who opens the developer tools, so building one
+  would have been theatre. Named as a gap, not hidden.

@@ -894,7 +894,7 @@ window.addEventListener("load", () => {
     document.querySelector("#reserve-size-title").focus();
 
     document.querySelector("#reserve-size-form").reset();
-    document.querySelector("#repair-percentage").value = "5";
+    document.querySelector("#repair-percentage").value = "7";
     document.querySelector("#reserve-locate-form").reset();
     document.querySelector("#income-form").reset();
     document.querySelector("#monthly-setaside-form").reset();

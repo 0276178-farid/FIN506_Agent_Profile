@@ -250,3 +250,51 @@ folder myself rather than taking its word. The rule now stands in writing: no rm
 rmdir, reset or any destructive command outside the working directory, and if it
 writes to the wrong place it tells me. The lesson is mine, not the agent's: I had
 been approving terminal commands without reading the path.
+
+## 2026-11-22
+
+Rebuilt the product after the professors said no one had a real differentiator.
+
+**The fact I had and threw away.** In August my user told me the MXN 200,000 was
+used to pay maintenance on the apartments. I wrote it in the SPEC and never read
+it again, because it did not fit what I thought I was building. It was the whole
+project: that money is a reserve she keeps on purpose, not money she forgot to
+invest.
+
+**Her own numbers say the opposite of what I assumed.** I called her and collected
+five properties, their rents, and their property taxes. Vacancy at her two months,
+repairs at her own 7%, and the five prediales come to MXN 854,107. She holds
+200,000 — twenty-three per cent of what she needs. She is not over-saving, she is
+exposed, and she said why: "I never calculated it, it is what makes me feel safe,
+so I end up keeping extra."
+
+**I had invented a premise and nearly presented it.** Before that call I had
+assumed her rent was irregular and that property tax disrupted her month. It
+turned out to be true, and she confirmed it in detail, but on the day I wrote it
+I had no evidence for it. Claude flagged which parts of the story were mine and
+which were hers, and the difference mattered.
+
+**The builder refused to plan against a rule I had written badly.** I asked it to
+keep the reserve excess out of the monthly investable amount. It stopped, said
+that contradicted Money rule 15, and required me to correct the SPEC first. It
+was right: I had conflated a one-time release with recurring monthly flow, and
+Money rule 11 starts the projection at zero, so folding the excess into month one
+would have compounded it as if it recurred every month.
+
+**The builder ran a destructive command outside the repository.** It ran `rm -f`
+on a path in my Downloads folder, twice, then `rmdir`. It said the file was a
+placeholder it had created by writing to the wrong path. I verified the folder
+myself rather than taking its word. The rule is now explicit: no rm, rmdir or any
+destructive command outside the working directory, and if it writes to the wrong
+place it reports it and leaves removal to me. The lesson is mine: I had been
+approving terminal commands without reading the path.
+
+**What the price change fixed.** Moving from 199 to 299 with the registration cost
+in took break-even from Year 4 to Year 2, LTV/CAC from 2.49x to 3.74x, payback
+from 5.0 to 3.3 months, and the stake sold from 31% to 22%.
+
+**A limit I found in my own rule.** Money rule 14 sizes the vacancy allowance on
+the average rent per unit. Her units range from 15,000 to 110,806, so if the
+largest goes empty the allowance covers less than half the loss. The average works
+for an even portfolio and hers is not one. On the roadmap: size vacancy on the
+largest unit, not the average.

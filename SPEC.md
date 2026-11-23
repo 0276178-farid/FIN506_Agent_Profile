@@ -158,10 +158,11 @@ Every rule below is implemented as a commented function.
     appears only when the factor is first derived; it never touches a balance.
 14. **Reserve sizing.** The target reserve is the sum of three parts: a vacancy
     allowance (vacancy months x average monthly rent per unit), a repair allowance
-    (a percentage of annual rent, default 5%), and the annual property tax. Every
+    (a percentage of annual rent, default 7%), and the annual property tax. Every
     input and the default belong to the person, and the screen shows each part
-    separately so the total is never a black box. The 5% default is an assumption.
-    TODO-verify
+    separately so the total is never a black box. The 7% default comes from the
+    landlord I interviewed, who pays for appliances in her furnished units and
+    nothing in her unfurnished ones.
 
 15. **The reserve comes first, and the excess is separate.** When the held reserve
     is below target, the month's available amount tops up the shortfall before
